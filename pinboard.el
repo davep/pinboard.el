@@ -35,7 +35,7 @@
 (defconst pinboard-agent "pinboard.el (https://github/davep/pinboard.el)"
   "User agent to send to the Pinboard server.")
 
-(defvar pinboard-api-token ""
+(defvar pinboard-api-token nil
   "Your Pinboard account's API token.
 
 Visit https://pinboard.in/settings/password to get the token for
@@ -80,17 +80,19 @@ REPOSITORY!")
 (defun pinboard ()
   "Browse your pinboard pins."
   (interactive)
-  (pop-to-buffer "*Pinboard*")
-  (pinboard-mode)
-  (setq tabulated-list-entries
-        (mapcar (lambda (pin)
-                  (list
-                   (alist-get 'hash pin)
-                   (vector
-                    (alist-get 'description pin)
-                    (alist-get 'href pin))))
-                (pinboard-all-posts)))
-  (tabulated-list-print t))
+  (if (not pinboard-api-token)
+      (error "Please set your Pinboard API token")
+    (pop-to-buffer "*Pinboard*")
+    (pinboard-mode)
+    (setq tabulated-list-entries
+          (mapcar (lambda (pin)
+                    (list
+                     (alist-get 'hash pin)
+                     (vector
+                      (alist-get 'description pin)
+                      (alist-get 'href pin))))
+                  (pinboard-all-posts)))
+    (tabulated-list-print t)))
 
 (provide 'pinboard)
 
