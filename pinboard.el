@@ -71,6 +71,17 @@ REPOSITORY!")
    pinboard-pins
    (setq pinboard-pins (pinboard-call (pinboard-api-url "posts" "all")))))
 
+(defun pinboard-open ()
+  (interactive)
+  (message "We'll open the pin here"))
+
+(defvar pinboard-mode-map
+  (let ((map (make-sparse-keymap)))
+    (suppress-keymap map t)
+    (define-key map (kbd "RET") #'pinboard-open)
+    map)
+  "Local keymap for `pinboard'.")
+
 (define-derived-mode pinboard-mode tabulated-list-mode "Pinboard Mode"
   "Major mode for handling a list of Pinboard pins."
   (setq tabulated-list-format [("Description" 40 t) ("URL" 40 t)])
