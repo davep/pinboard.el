@@ -85,10 +85,10 @@ REPOSITORY!")
   (setq tabulated-list-entries
         (mapcar (lambda (pin)
                   (list
-                   (cdr (assoc 'hash pin))
+                   (alist-get 'hash pin)
                    (vector
-                    (cdr (assoc 'description pin))
-                    (cdr (assoc 'href pin)))))
+                    (alist-get 'description pin)
+                    (alist-get 'href pin))))
                 (pinboard-all-posts)))
   (tabulated-list-print t))
 
