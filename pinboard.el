@@ -49,11 +49,15 @@ REPOSITORY!")
 (defvar pinboard-pins nil
   "Cache of pins to display.")
 
+(defun pinboard-last-called (caller)
+  "When was CALLER last called?"
+  (or (get caller 'pinboard-last-called) 0))
+
 (defun pinboard-too-soon (caller rate)
   "Are we hitting on Pinboard too soon?
 
 See if we're calling CALLER before RATE has expired."
-  (let ((last (get caller 'pinboard-last-called)))
+  (let ((last (pinboard-last-called caller)))
     (when last
       (<= (- (float-time) last) rate))))
 
@@ -86,18 +90,17 @@ to help set rate limits."
   (if (pinboard-too-soon 'pinboard-all-posts 300)
       pinboard-pins
     ;; Okay, we're not calling too soon. This also suggests we've called
-    ;; before too. So let's get the time of the last call.
-    (let ((last-call (get 'pinboard-all-posts 'pinboard-last-called)))
-      ;; If we don't have any pins yet (normally not an issue at this point,
-      ;; but useful for testing), or pins have been updated more recently...
-      (if (or (not pinboard-pins) (< last-call (pinboard-last-updated)))
-          ;; ...grab a fresh copy.
-          (setq pinboard-pins
-                (pinboard-call
-                 (pinboard-api-url "posts" "all")
-                 'pinboard-all-posts))
-        ;; Looks like nothing has changed. Return what we've got.
-        pinboard-pins))))
+    ;; before too. If we don't have any pins yet (normally not an issue at
+    ;; this point, but useful for testing), or pins have been updated more
+    ;; recently...
+    (if (or (not pinboard-pins) (< (pinboard-last-called 'pinboard-all-posts) (pinboard-last-updated)))
+        ;; ...grab a fresh copy.
+        (setq pinboard-pins
+              (pinboard-call
+               (pinboard-api-url "posts" "all")
+               'pinboard-all-posts))
+      ;; Looks like nothing has changed. Return what we've got.
+      pinboard-pins)))
 
 (defun pinboard-find-pin (hash)
   "Find and return the pin identified by HASH."
