@@ -185,7 +185,7 @@ FILTER."
 
 (defun pinboard-tagged (tag)
   "Only show pins that are tagged with TAG."
-  (interactive (list (completing-read "Tag: " (pinboard-tags))))
+  (interactive (list (completing-read "Tag: " (pinboard-get-tags))))
   (pinboard-redraw
    (lambda (pin)
      (seq-contains (split-string (alist-get 'tags pin)) tag))))
