@@ -136,6 +136,11 @@ FILTER."
   (interactive)
   (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "yes"))))
 
+(defun pinboard-public ()
+  "Only show public pins."
+  (interactive)
+  (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "yes"))))
+
 (defun pinboard-refresh ()
   "Refresh the list."
   (interactive)
@@ -146,6 +151,7 @@ FILTER."
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
     (define-key map "g"         #'pinboard-refresh)
+    (define-key map "p"         #'pinboard-public)
     (define-key map "u"         #'pinboard-unread)
     (define-key map "v"         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
