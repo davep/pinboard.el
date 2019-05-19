@@ -29,6 +29,7 @@ as I get time to work on it. Current commands available in the list include:
 | `pinboard-unread`  | u   | Show only unread pins in the list   |
 | `pinboard-view`    | v   | View the data for a pin in a window |
 | `pinboard-public`  | p   | Show only public pins in the list   |
+| `pinboard-private` | P   | Show only private pins in the list  |
 | `pinboard-open`    | RET | Open the pin's URL in a web browser |
 
 The code only works with all pins right now, and does its best to ensure

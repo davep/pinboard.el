@@ -141,6 +141,11 @@ FILTER."
   (interactive)
   (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "yes"))))
 
+(defun pinboard-private ()
+  "Only show private pins."
+  (interactive)
+  (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "no"))))
+
 (defun pinboard-refresh ()
   "Refresh the list."
   (interactive)
@@ -152,6 +157,7 @@ FILTER."
     (suppress-keymap map t)
     (define-key map "g"         #'pinboard-refresh)
     (define-key map "p"         #'pinboard-public)
+    (define-key map "P"         #'pinboard-private)
     (define-key map "u"         #'pinboard-unread)
     (define-key map "v"         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
