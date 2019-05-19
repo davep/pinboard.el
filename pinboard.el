@@ -106,6 +106,7 @@ FILTER."
   (tabulated-list-print t))
 
 (defun pinboard-open ()
+  "Open the currently-highlighted pin in a web browser."
   (interactive)
   (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
     (if pin
