@@ -72,8 +72,8 @@ between calls."
 LIMIT-RECORD is a symbol that is the name of the variable that
 records the time the call was made. This helps with managing rate
 limiting."
-  (let* ((url-request-extra-headers `(("User-Agent" . ,pinboard-agent)))
-         (url-show-status nil))
+  (let ((url-request-extra-headers `(("User-Agent" . ,pinboard-agent)))
+        (url-show-status nil))
     (set limit-record (float-time))
     (with-temp-buffer
       (url-insert-file-contents url)
