@@ -53,6 +53,11 @@ REPOSITORY!")
   "The last time a call was made to a 5-minute-limited API.")
 
 (defun pinboard-too-soon (last-symbol length)
+  "Are we hitting on Pinboard too soon?
+
+LAST-SYMBOL is the name of the `defvar' that will have recorded
+the previous call. LENGTH is how long we're supposed to wait
+between calls."
   (let ((last (symbol-value last-symbol)))
     (when last
       (<= (- (float-time) last) length))))
