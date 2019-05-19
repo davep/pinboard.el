@@ -186,7 +186,7 @@ FILTER."
 
 ;;;###autoload
 (defun pinboard ()
-  "Browse your pinboard pins."
+  "Browse your Pinboard pins."
   (interactive)
   (if (not pinboard-api-token)
       ;; TODO: Have some sensible method of recording/loading the token, in
