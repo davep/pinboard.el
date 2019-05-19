@@ -189,6 +189,11 @@ FILTER."
   (interactive)
   (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "yes"))))
 
+(defun pinboard-read ()
+  "Only show read pins."
+  (interactive)
+  (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "no"))))
+
 (defun pinboard-public ()
   "Only show public pins."
   (interactive)
@@ -219,6 +224,7 @@ FILTER."
     (define-key map "p"         #'pinboard-public)
     (define-key map "P"         #'pinboard-private)
     (define-key map "u"         #'pinboard-unread)
+    (define-key map "r"         #'pinboard-read)
     (define-key map "t"         #'pinboard-tagged)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
