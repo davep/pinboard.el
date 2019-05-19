@@ -162,6 +162,9 @@ FILTER."
   "Browse your pinboard pins."
   (interactive)
   (if (not pinboard-api-token)
+      ;; TODO: Have some sensible method of recording/loading the token, in
+      ;; a way that heavily-discourages the user from placing it where
+      ;; someone could see it.
       (error "Please set your Pinboard API token")
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)
