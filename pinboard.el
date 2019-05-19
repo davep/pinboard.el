@@ -183,6 +183,13 @@ FILTER."
   (interactive)
   (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "no"))))
 
+(defun pinboard-tagged (tag)
+  "Only show pins that are tagged with TAG."
+  (interactive (list (completing-read "Tag: " (pinboard-tags))))
+  (pinboard-redraw
+   (lambda (pin)
+     (seq-contains (split-string (alist-get 'tags pin)) tag))))
+
 (defun pinboard-refresh ()
   "Refresh the list."
   (interactive)
@@ -196,6 +203,7 @@ FILTER."
     (define-key map "p"         #'pinboard-public)
     (define-key map "P"         #'pinboard-private)
     (define-key map "u"         #'pinboard-unread)
+    (define-key map "t"         #'pinboard-tagged)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
     map)
