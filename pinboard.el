@@ -155,8 +155,7 @@ FILTER."
                   (list
                    (alist-get 'hash pin)
                    (vector
-                    (if
-                        (string= (alist-get 'shared pin) "yes")
+                    (if (string= (alist-get 'shared pin) "yes")
                         pinboard-public-symbol
                       pinboard-private-symbol)
                     (alist-get 'description pin)
