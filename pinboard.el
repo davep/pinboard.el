@@ -49,24 +49,39 @@ REPOSITORY!")
 (defvar pinboard-pins nil
   "Cache of pins to display.")
 
+(defvar pinboard-last-5-min-call nil
+  "The last time a call was made to a 5-minute-limited API.")
+
+(defun pinboard-too-soon (last-symbol length)
+  (let ((last (symbol-value last-symbol)))
+    (when last
+      (<= (- (float-time) last) length))))
+
 (defun pinboard-api-url (&rest params)
   "Build the API call from PARAMS."
   (format pinboard-api-url (string-join params "/") pinboard-api-token))
 
-(defun pinboard-call (url)
-  "Call on URL and return the data."
+(defun pinboard-call (url limit-record)
+  "Call on URL and return the data.
+
+LIMIT-RECORD is a symbol that is the name of the variable that
+records the time the call was made. This helps with managing rate
+limiting."
   (let* ((url-request-extra-headers `(("User-Agent" . ,pinboard-agent)))
          (url-show-status nil))
+    (set limit-record (float-time))
     (with-temp-buffer
       (url-insert-file-contents url)
       (json-read-from-string (buffer-string)))))
 
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
-  ;; TODO: Rate limit to once every 5 minutes.
-  (or
-   pinboard-pins
-   (setq pinboard-pins (pinboard-call (pinboard-api-url "posts" "all")))))
+  (if (pinboard-too-soon 'pinboard-last-5-min-call 300)
+      pinboard-pins
+    (setq pinboard-pins
+          (pinboard-call
+           (pinboard-api-url "posts" "all")
+           'pinboard-last-5-min-call))))
 
 (defun pinboard-find-pin (hash)
   "Find and return the pin identified by HASH."
