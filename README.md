@@ -36,4 +36,15 @@ The code only works with all pins right now, and does its best to ensure
 that the list is never requested more than once every 5 minutes (as per the
 rate limits in the Pinboard API). Expect this to go wrong.
 
+## TODO
+
+- [ ] Filter by tags.
+- [ ] View tag list/cloud.
+- [ ] Add a pin.
+- [ ] Edit a pin.
+- [ ] Delete a pin.
+- [ ] Mark unread pin as read.
+- [ ] Notes viewing.
+- [ ] Stuff.
+
 [//]: # (README.md ends here)
