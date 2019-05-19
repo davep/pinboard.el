@@ -118,6 +118,20 @@ FILTER."
         (browse-url (alist-get 'href pin))
       (error "Could not find pin %s" (tabulated-list-get-id)))))
 
+(defun pinboard-view ()
+  "View the details of the currently-highlighted pin."
+  (interactive)
+  (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
+    (unless pin
+      (error "Could not find pin %s" (tabulated-list-get-id)))
+    ;; TODO: For now, this is just a dump of pin data to a help window. This
+    ;; will be done a lot better if it's a nicely-formatted display.
+    (with-help-window "*Pinboard pin*"
+      (mapc (lambda (info)
+              (princ (format "%s:\n" (car info)))
+              (princ (format "%s\n\n" (cdr info))))
+            pin))))
+
 (defun pinboard-unread ()
   "Only show unread pins."
   (interactive)
@@ -134,6 +148,7 @@ FILTER."
     (suppress-keymap map t)
     (define-key map "g"         #'pinboard-refresh)
     (define-key map "u"         #'pinboard-unread)
+    (define-key map "v"         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
     map)
   "Local keymap for `pinboard'.")
