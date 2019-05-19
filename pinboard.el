@@ -49,44 +49,38 @@ REPOSITORY!")
 (defvar pinboard-pins nil
   "Cache of pins to display.")
 
-(defvar pinboard-last-5-min-call nil
-  "The last time a call was made to a 5-minute-limited API.")
-
-(defun pinboard-too-soon (last-symbol length)
+(defun pinboard-too-soon (caller rate)
   "Are we hitting on Pinboard too soon?
 
-LAST-SYMBOL is the name of the `defvar' that will have recorded
-the previous call. LENGTH is how long we're supposed to wait
-between calls."
-  (let ((last (symbol-value last-symbol)))
+See if we're calling CALLER before RATE has expired."
+  (let ((last (get caller 'pinboard-last-called)))
     (when last
-      (<= (- (float-time) last) length))))
+      (<= (- (float-time) last) rate))))
 
 (defun pinboard-api-url (&rest params)
   "Build the API call from PARAMS."
   (format pinboard-api-url (string-join params "/") pinboard-api-token))
 
-(defun pinboard-call (url limit-record)
+(defun pinboard-call (url caller)
   "Call on URL and return the data.
 
-LIMIT-RECORD is a symbol that is the name of the variable that
-records the time the call was made. This helps with managing rate
-limiting."
+CALLER is a symbol that is the name of the caller. This is used
+to help set rate limits."
   (let ((url-request-extra-headers `(("User-Agent" . ,pinboard-agent)))
         (url-show-status nil))
-    (set limit-record (float-time))
+    (put caller 'pinboard-last-called (float-time))
     (with-temp-buffer
       (url-insert-file-contents url)
       (json-read-from-string (buffer-string)))))
 
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
-  (if (pinboard-too-soon 'pinboard-last-5-min-call 300)
+  (if (pinboard-too-soon 'pinboard-all-posts 300)
       pinboard-pins
     (setq pinboard-pins
           (pinboard-call
            (pinboard-api-url "posts" "all")
-           'pinboard-last-5-min-call))))
+           'pinboard-all-posts))))
 
 (defun pinboard-find-pin (hash)
   "Find and return the pin identified by HASH."
