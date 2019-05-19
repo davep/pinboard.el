@@ -128,8 +128,7 @@ FILTER."
     ;; will be done a lot better if it's a nicely-formatted display.
     (with-help-window "*Pinboard pin*"
       (mapc (lambda (info)
-              (princ (format "%s:\n" (car info)))
-              (princ (format "%s\n\n" (cdr info))))
+              (princ (format "%s:\n%s\n\n" (car info) (cdr info))))
             pin))))
 
 (defun pinboard-unread ()
