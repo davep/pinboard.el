@@ -102,7 +102,7 @@ FILTER."
                    (vector
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
-                (seq-filter (or filter (lambda (&optional pin) t)) pinboard-pins)))
+                (seq-filter (or filter (lambda (_) t)) pinboard-pins)))
   (tabulated-list-print t))
 
 (defun pinboard-open ()
