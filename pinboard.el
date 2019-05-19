@@ -105,6 +105,7 @@ FILTER."
                   (list
                    (alist-get 'hash pin)
                    (vector
+                    (if (string= (alist-get 'shared pin) "yes") " " "X")
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
                 (seq-filter (or filter #'identity) pinboard-pins)))
@@ -166,7 +167,10 @@ FILTER."
 
 (define-derived-mode pinboard-mode tabulated-list-mode "Pinboard Mode"
   "Major mode for handling a list of Pinboard pins."
-  (setq tabulated-list-format [("Description" 40 t) ("URL" 40 t)])
+  (setq tabulated-list-format
+        [("P" 1 t)
+         ("Description" 60 t)
+         ("URL" 30 t)])
   (tabulated-list-init-header))
 
 ;;;###autoload
