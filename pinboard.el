@@ -90,8 +90,11 @@ limiting."
      (string= (alist-get 'hash pin) hash))
    pinboard-pins))
 
-(defun pinboard-redraw ()
-  "Redraw the pin list."
+(defun pinboard-redraw (&optional filter)
+  "Redraw the pin list.
+
+Optionally filter the list of pins to draw using the function
+FILTER."
   (setq tabulated-list-entries
         (mapcar (lambda (pin)
                   (list
@@ -99,7 +102,7 @@ limiting."
                    (vector
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
-                pinboard-pins))
+                (seq-filter (or filter (lambda (&optional pin) t)) pinboard-pins)))
   (tabulated-list-print t))
 
 (defun pinboard-open ()
@@ -108,6 +111,11 @@ limiting."
     (if pin
         (browse-url (alist-get 'href pin))
       (error "Could not find pin %s" (tabulated-list-get-id)))))
+
+(defun pinboard-unread ()
+  "Only show unread pins."
+  (interactive)
+  (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "yes"))))
 
 (defun pinboard-refresh ()
   "Refresh the list."
@@ -119,6 +127,7 @@ limiting."
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
     (define-key map "g"         #'pinboard-refresh)
+    (define-key map "u"         #'pinboard-unread)
     (define-key map (kbd "RET") #'pinboard-open)
     map)
   "Local keymap for `pinboard'.")
