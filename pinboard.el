@@ -61,11 +61,6 @@ REPOSITORY!")
       (url-insert-file-contents url)
       (json-read-from-string (buffer-string)))))
 
-(defun pinboard-recent-posts ()
-  "Return the user's recent posts on Pinboard."
-  ;; TODO: Rate limit to once every 60 seconds.
-  (pinboard-call (pinboard-api-url "posts" "recent")))
-
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
   ;; TODO: Rate limit to once every 5 minutes.
