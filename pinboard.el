@@ -49,6 +49,9 @@ REPOSITORY!")
 (defvar pinboard-pins nil
   "Cache of pins to display.")
 
+(defvar pinboard-tags nil
+  "Cache of tags the user has used.")
+
 (defun pinboard-last-called (caller)
   "When was CALLER last called?"
   (or (get caller 'pinboard-last-called) 0))
@@ -82,6 +85,25 @@ to help set rate limits."
   (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") 'pinboard-last-updated))))
     (when result
       (float-time (decode-time (parse-iso8601-time-string result))))))
+
+(defun pinboard-get-tags ()
+  "Get the list of tags used by the user."
+  ;; If it's within the 3 second rule...
+  (if (pinboard-too-soon 'pinboard-get-tags 3)
+      ;; ...just go with what we've got.
+      pinboard-tags
+    ;; We're not calling on Pinboard too soon. So, next up, let's see if
+    ;; pins have been updated since we last called for tags, or if we simply
+    ;; don't have any tags yet...
+    (if (or (not pinboard-tags) (< (pinboard-last-called 'pinboard-get-tags) (pinboard-last-updated)))
+        ;; ...grab a copy of the user's tags.
+        (setq pinboard-tags
+              (pinboard-call
+               (pinboard-api-url "tags" "get")
+               'pinboard-tags))
+      ;; Looks like nothing has changed, so go with the tags we've already
+      ;; got.
+      pinboard-tags)))
 
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
