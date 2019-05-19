@@ -5,7 +5,7 @@
 ;; Version: 0.1
 ;; Keywords: {{keywords}}
 ;; URL: https://github.com/davep/pinboard.el
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "25"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
