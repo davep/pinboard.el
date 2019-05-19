@@ -90,6 +90,18 @@ limiting."
      (string= (alist-get 'hash pin) hash))
    pinboard-pins))
 
+(defun pinboard-redraw ()
+  "Redraw the pin list."
+  (setq tabulated-list-entries
+        (mapcar (lambda (pin)
+                  (list
+                   (alist-get 'hash pin)
+                   (vector
+                    (alist-get 'description pin)
+                    (alist-get 'href pin))))
+                (pinboard-all-posts)))
+  (tabulated-list-print t))
+
 (defun pinboard-open ()
   (interactive)
   (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
@@ -117,15 +129,7 @@ limiting."
       (error "Please set your Pinboard API token")
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)
-    (setq tabulated-list-entries
-          (mapcar (lambda (pin)
-                    (list
-                     (alist-get 'hash pin)
-                     (vector
-                      (alist-get 'description pin)
-                      (alist-get 'href pin))))
-                  (pinboard-all-posts)))
-    (tabulated-list-print t)))
+    (pinboard-redraw)))
 
 (provide 'pinboard)
 
