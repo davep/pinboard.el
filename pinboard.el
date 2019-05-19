@@ -30,6 +30,7 @@
 (require 'json)
 (require 'url-vars)
 (require 'browse-url)
+(require 'auth-source)
 
 (defgroup pinboard nil
   "Pinboard client for Emacs."
@@ -77,6 +78,15 @@ See if we're calling CALLER before RATE has expired."
   (let ((last (pinboard-last-called caller)))
     (when last
       (<= (- (float-time) last) rate))))
+
+(defun pinboard-auth ()
+  "Attempt to get the API token for Pinboard."
+  (unless pinboard-api-token
+    (let ((auth (car (auth-source-search :host "api.pinboard.in" :requires '(secret)))))
+      (when auth
+        (let ((token (plist-get auth :secret)))
+          (when token
+            (setq pinboard-api-token (funcall token))))))))
 
 (defun pinboard-api-url (&rest params)
   "Build the API call from PARAMS."
@@ -243,10 +253,8 @@ FILTER."
 (defun pinboard ()
   "Browse your Pinboard pins."
   (interactive)
+  (pinboard-auth)
   (if (not pinboard-api-token)
-      ;; TODO: Have some sensible method of recording/loading the token, in
-      ;; a way that heavily-discourages the user from placing it where
-      ;; someone could see it.
       (error "Please set your Pinboard API token")
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)

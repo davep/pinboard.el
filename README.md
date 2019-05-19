@@ -7,17 +7,12 @@ right now, don't be shocked if something is missing or plain broken.
 
 To get started, visit [your password settings
 page](https://pinboard.in/settings/password) on Pinboard and get the API
-token that's displayed there. Then, in Emacs, set `pinboard-api-token` to
-it. Eg, in your `*scratch*` type:
+token that's displayed there. Then edit `~/.authinfo` and add a line like
+this:
 
-```elisp
-(setq pinboard-api-token "foo:8ar8a5w188l3")
 ```
-
-And hit <kbd>Ctrl-x</kbd> <kbd>Ctrl-e</kbd> after it. (in time, I'll have a
-far more sensible way to set and remember the token -- for now though I
-don't want to be encouraging people to accidentally set it in a way that it
-ends up in their public repository for the Emacs config, etc).
+machine api.pinboard.in password foo:8ar8a5w188l3
+```
 
 Once done, you can <kbd>M-x</kbd> <kbd>pinboard</kbd> <kbd>RET</kbd> and
 browse your pins. The client is currently very feature-poor, but expanding
