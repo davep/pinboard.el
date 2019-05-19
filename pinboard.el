@@ -26,6 +26,7 @@
 
 ;;; Code:
 
+(require 'seq)
 (require 'json)
 (require 'url-vars)
 
@@ -70,6 +71,13 @@ REPOSITORY!")
   (or
    pinboard-pins
    (setq pinboard-pins (pinboard-call (pinboard-api-url "posts" "all")))))
+
+(defun pinboard-find-pin (hash)
+  "Find and return the pin identified by HASH."
+  (seq-find
+   (lambda (pin)
+     (string= (alist-get 'hash pin) hash))
+   pinboard-pins))
 
 (defun pinboard-open ()
   (interactive)
