@@ -99,7 +99,7 @@ limiting."
                    (vector
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
-                (pinboard-all-posts)))
+                pinboard-pins))
   (tabulated-list-print t))
 
 (defun pinboard-open ()
@@ -109,9 +109,16 @@ limiting."
         (browse-url (alist-get 'href pin))
       (error "Could not find pin %s" (tabulated-list-get-id)))))
 
+(defun pinboard-refresh ()
+  "Refresh the list."
+  (interactive)
+  (pinboard-all-posts)
+  (pinboard-redraw))
+
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
+    (define-key map "g"         #'pinboard-refresh)
     (define-key map (kbd "RET") #'pinboard-open)
     map)
   "Local keymap for `pinboard'.")
@@ -129,6 +136,7 @@ limiting."
       (error "Please set your Pinboard API token")
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)
+    (pinboard-all-posts)
     (pinboard-redraw)))
 
 (provide 'pinboard)
