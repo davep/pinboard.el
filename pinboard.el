@@ -195,8 +195,7 @@ FILTER."
       (error "Please set your Pinboard API token")
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)
-    (pinboard-all-posts)
-    (pinboard-redraw)))
+    (pinboard-refresh)))
 
 (provide 'pinboard)
 
