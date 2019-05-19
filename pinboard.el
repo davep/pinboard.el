@@ -31,6 +31,15 @@
 (require 'url-vars)
 (require 'browse-url)
 
+(defgroup pinboard nil
+  "Pinboard client for Emacs."
+  :group 'hypermedia)
+
+(defcustom pinboard-private-symbol "X"
+  "The character to use to show a pin is private."
+  :type 'string
+  :group 'pinboard)
+
 (defconst pinboard-api-url "https://api.pinboard.in/v1/%s?auth_token=%s&format=json"
   "Base URL of the Pinboard API.")
 
@@ -141,7 +150,7 @@ FILTER."
                   (list
                    (alist-get 'hash pin)
                    (vector
-                    (if (string= (alist-get 'shared pin) "yes") " " "X")
+                    (if (string= (alist-get 'shared pin) "yes") " " pinboard-private-symbol)
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
                 (seq-filter (or filter #'identity) pinboard-pins)))
