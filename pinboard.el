@@ -81,12 +81,23 @@ to help set rate limits."
 
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
+  ;; If we're calling on the list within 5 minutes of a previous call, just
+  ;; go with what we've got (see the rate limits in the Pinboard API).
   (if (pinboard-too-soon 'pinboard-all-posts 300)
       pinboard-pins
-    (setq pinboard-pins
-          (pinboard-call
-           (pinboard-api-url "posts" "all")
-           'pinboard-all-posts))))
+    ;; Okay, we're not calling too soon. This also suggests we've called
+    ;; before too. So let's get the time of the last call.
+    (let ((last-call (get 'pinboard-all-posts 'pinboard-last-called)))
+      ;; If we don't have any pins yet (normally not an issue at this point,
+      ;; but useful for testing), or pins have been updated more recently...
+      (if (or (not pinboard-pins) (< last-call (pinboard-last-updated)))
+          ;; ...grab a fresh copy.
+          (setq pinboard-pins
+                (pinboard-call
+                 (pinboard-api-url "posts" "all")
+                 'pinboard-all-posts))
+        ;; Looks like nothing has changed. Return what we've got.
+        pinboard-pins))))
 
 (defun pinboard-find-pin (hash)
   "Find and return the pin identified by HASH."
