@@ -29,6 +29,7 @@
 (require 'seq)
 (require 'json)
 (require 'url-vars)
+(require 'browse-url)
 
 (defconst pinboard-api-url "https://api.pinboard.in/v1/%s?auth_token=%s&format=json"
   "Base URL of the Pinboard API.")
@@ -81,7 +82,10 @@ REPOSITORY!")
 
 (defun pinboard-open ()
   (interactive)
-  (message "We'll open the pin here"))
+  (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
+    (if pin
+        (browse-url (alist-get 'href pin))
+      (error "Could not find pin %s" (tabulated-list-get-id)))))
 
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
