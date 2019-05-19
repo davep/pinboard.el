@@ -67,9 +67,13 @@ REPOSITORY!")
 (defvar pinboard-tags nil
   "Cache of tags the user has used.")
 
+(defun pinboard-remember-call (caller)
+  "Remember now as when CALLER was last called."
+  (put caller :pinboard-last-called (float-time)))
+
 (defun pinboard-last-called (caller)
   "When was CALLER last called?"
-  (or (get caller 'pinboard-last-called) 0))
+  (or (get caller :pinboard-last-called) 0))
 
 (defun pinboard-too-soon (caller rate)
   "Are we hitting on Pinboard too soon?
@@ -99,7 +103,7 @@ CALLER is a symbol that is the name of the caller. This is used
 to help set rate limits."
   (let ((url-request-extra-headers `(("User-Agent" . ,pinboard-agent)))
         (url-show-status nil))
-    (put caller 'pinboard-last-called (float-time))
+    (pinboard-remember-call caller)
     (with-temp-buffer
       (url-insert-file-contents url)
       (json-read-from-string (buffer-string)))))
