@@ -73,6 +73,12 @@ to help set rate limits."
       (url-insert-file-contents url)
       (json-read-from-string (buffer-string)))))
 
+(defun pinboard-last-updated ()
+  "Get when Pinboard was last updated."
+  (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") 'pinboard-last-updated))))
+    (when result
+      (float-time (decode-time (parse-iso8601-time-string result))))))
+
 (defun pinboard-all-posts ()
   "Return all of the user's posts on Pinboard."
   (if (pinboard-too-soon 'pinboard-all-posts 300)
