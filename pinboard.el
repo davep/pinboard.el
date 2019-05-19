@@ -176,23 +176,25 @@ FILTER."
 (defun pinboard-open ()
   "Open the currently-highlighted pin in a web browser."
   (interactive)
-  (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
-    (if pin
-        (browse-url (alist-get 'href pin))
-      (error "Could not find pin %s" (tabulated-list-get-id)))))
+  (when (tabulated-list-get-id)
+    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
+      (if pin
+          (browse-url (alist-get 'href pin))
+        (error "Could not find pin %s" (tabulated-list-get-id))))))
 
 (defun pinboard-view ()
   "View the details of the currently-highlighted pin."
   (interactive)
-  (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
-    (unless pin
-      (error "Could not find pin %s" (tabulated-list-get-id)))
-    ;; TODO: For now, this is just a dump of pin data to a help window. This
-    ;; will be done a lot better if it's a nicely-formatted display.
-    (with-help-window "*Pinboard pin*"
-      (mapc (lambda (info)
-              (princ (format "%s:\n%s\n\n" (car info) (cdr info))))
-            pin))))
+  (when (tabulated-list-get-id)
+    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
+      (unless pin
+        (error "Could not find pin %s" (tabulated-list-get-id)))
+      ;; TODO: For now, this is just a dump of pin data to a help window. This
+      ;; will be done a lot better if it's a nicely-formatted display.
+      (with-help-window "*Pinboard pin*"
+        (mapc (lambda (info)
+                (princ (format "%s:\n%s\n\n" (car info) (cdr info))))
+              pin)))))
 
 (defun pinboard-unread ()
   "Only show unread pins."
