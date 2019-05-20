@@ -207,8 +207,13 @@ FILTER."
           (insert
            (pinboard-caption "Title") "\n"
            (alist-get 'description pin) "\n\n"
-           (pinboard-caption "URL") "\n"
-           (alist-get 'href pin) "\n\n"
+           (pinboard-caption "URL") "\n")
+          (help-insert-xref-button
+           (alist-get 'href pin)
+           'help-url
+           (alist-get 'href pin))
+          (insert
+           "\n\n"
            (pinboard-caption "Description") "\n"
            (with-temp-buffer
              (insert (alist-get 'extended pin))
