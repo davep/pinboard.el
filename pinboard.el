@@ -46,6 +46,11 @@
   :type 'string
   :group 'pinboard)
 
+(defface pinboard-caption
+  '((t :inherit (bold font-lock-function-name-face)))
+  "Face used on captions in the Pinboard output windows."
+  :group 'pinboard)
+
 (defconst pinboard-api-url "https://api.pinboard.in/v1/%s?auth_token=%s&format=json"
   "Base URL of the Pinboard API.")
 
@@ -186,6 +191,10 @@ FILTER."
           (browse-url (alist-get 'href pin))
         (error "Could not find pin %s" (tabulated-list-get-id))))))
 
+(defun pinboard-caption (s)
+  "Add properties to S to make it a caption for Pinboard output."
+  (propertize (concat s ": ") 'font-lock-face 'pinboard-caption))
+
 (defun pinboard-view ()
   "View the details of the currently-highlighted pin."
   (interactive)
@@ -193,12 +202,23 @@ FILTER."
     (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
       (unless pin
         (error "Could not find pin %s" (tabulated-list-get-id)))
-      ;; TODO: For now, this is just a dump of pin data to a help window. This
-      ;; will be done a lot better if it's a nicely-formatted display.
       (with-help-window "*Pinboard pin*"
-        (mapc (lambda (info)
-                (princ (format "%s:\n%s\n\n" (car info) (cdr info))))
-              pin)))))
+        (with-current-buffer standard-output
+          (insert
+           (pinboard-caption "Title") "\n"
+           (alist-get 'description pin) "\n\n"
+           (pinboard-caption "URL") "\n"
+           (alist-get 'href pin) "\n\n"
+           (pinboard-caption "Description") "\n"
+           (alist-get 'extended pin) "\n\n"
+           (pinboard-caption "Time") "\n"
+           (alist-get 'time pin) "\n\n"
+           (pinboard-caption "Public") "\n"
+           (capitalize (alist-get 'shared pin)) "\n\n"
+           (pinboard-caption "Unread") "\n"
+           (capitalize (alist-get 'toread pin)) "\n\n"
+           (pinboard-caption "Tags") "\n"
+           (alist-get 'tags pin)))))))
 
 (defun pinboard-unread ()
   "Only show unread pins."
