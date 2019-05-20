@@ -210,7 +210,11 @@ FILTER."
            (pinboard-caption "URL") "\n"
            (alist-get 'href pin) "\n\n"
            (pinboard-caption "Description") "\n"
-           (alist-get 'extended pin) "\n\n"
+           (with-temp-buffer
+             (insert (alist-get 'extended pin))
+             (fill-region (point-min) (point-max))
+             (buffer-string))
+           "\n\n"
            (pinboard-caption "Time") "\n"
            (alist-get 'time pin) "\n\n"
            (pinboard-caption "Public") "\n"
