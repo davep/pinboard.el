@@ -254,7 +254,8 @@ FILTER."
         [("P" 1 t)
          ("Description" 60 t)
          ("URL" 30 t)])
-  (tabulated-list-init-header))
+  (tabulated-list-init-header)
+  (setq tabulated-list-sort-key '("Description")))
 
 ;;;###autoload
 (defun pinboard ()
