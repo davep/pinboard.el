@@ -212,13 +212,16 @@ FILTER."
            (alist-get 'href pin)
            'help-url
            (alist-get 'href pin))
+          (let ((desc (string-trim (alist-get 'extended pin))))
+            (unless (zerop (length desc))
+              (insert
+               "\n\n"
+               (pinboard-caption "Description") "\n"
+               (with-temp-buffer
+                 (insert desc)
+                 (fill-region (point-min) (point-max))
+                 (buffer-string)))))
           (insert
-           "\n\n"
-           (pinboard-caption "Description") "\n"
-           (with-temp-buffer
-             (insert (alist-get 'extended pin))
-             (fill-region (point-min) (point-max))
-             (buffer-string))
            "\n\n"
            (pinboard-caption "Time") "\n"
            (alist-get 'time pin) "\n\n"
