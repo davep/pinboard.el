@@ -274,6 +274,7 @@ FILTER."
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
+    (define-key map "a"         #'pinboard-refresh)
     (define-key map "g"         #'pinboard-refresh)
     (define-key map "p"         #'pinboard-public)
     (define-key map "P"         #'pinboard-private)
