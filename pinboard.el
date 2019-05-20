@@ -28,8 +28,10 @@
 
 (require 'seq)
 (require 'json)
+(require 'subr-x)
 (require 'url-vars)
 (require 'browse-url)
+(require 'parse-time)
 (require 'auth-source)
 
 (defgroup pinboard nil
