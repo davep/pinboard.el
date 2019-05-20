@@ -115,14 +115,14 @@ to help set rate limits."
 
 (defun pinboard-last-updated ()
   "Get when Pinboard was last updated."
-  (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") 'pinboard-last-updated))))
+  (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
     (when result
       (float-time (decode-time (parse-iso8601-time-string result))))))
 
 (defun pinboard-get-tags ()
   "Get the list of tags used by the user."
   ;; If it's within the 3 second rule...
-  (if (pinboard-too-soon 'pinboard-get-tags 3)
+  (if (pinboard-too-soon :pinboard-get-tags 3)
       ;; ...just go with what we've got.
       pinboard-tags
     ;; We're not calling on Pinboard too soon. So, next up, let's see if
@@ -133,7 +133,7 @@ to help set rate limits."
         (setq pinboard-tags
               (pinboard-call
                (pinboard-api-url "tags" "get")
-               'pinboard-get-tags))
+               :pinboard-get-tags))
       ;; Looks like nothing has changed, so go with the tags we've already
       ;; got.
       pinboard-tags)))
@@ -142,7 +142,7 @@ to help set rate limits."
   "Return all of the user's posts on Pinboard."
   ;; If we're calling on the list within 5 minutes of a previous call, just
   ;; go with what we've got (see the rate limits in the Pinboard API).
-  (if (pinboard-too-soon 'pinboard-all-posts 300)
+  (if (pinboard-too-soon :pinboard-all-posts 300)
       pinboard-pins
     ;; Okay, we're not calling too soon. This also suggests we've called
     ;; before too. If we don't have any pins yet (normally not an issue at
@@ -153,7 +153,7 @@ to help set rate limits."
         (setq pinboard-pins
               (pinboard-call
                (pinboard-api-url "posts" "all")
-               'pinboard-all-posts))
+               :pinboard-all-posts))
       ;; Looks like nothing has changed. Return what we've got.
       pinboard-pins)))
 
