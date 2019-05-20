@@ -1,4 +1,4 @@
-;;; pinboard.el --- pinboard.in client -*- lexical-binding: t -*-
+;;; pinboard.el --- A pinboard.in client -*- lexical-binding: t -*-
 ;; Copyright 2019 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
