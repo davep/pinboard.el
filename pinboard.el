@@ -66,6 +66,9 @@ your account.
 DO NOT EVER SET THIS IN A WAY THAT IT CAN BE SEEN IN SOME PUBLIC
 REPOSITORY!")
 
+(defvar pinboard-last-updated nil
+  "Cache of the time that Pinboard was last updated.")
+
 (defvar pinboard-pins nil
   "Cache of pins to display.")
 
@@ -115,9 +118,11 @@ to help set rate limits."
 
 (defun pinboard-last-updated ()
   "Get when Pinboard was last updated."
-  (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
-    (when result
-      (float-time (decode-time (parse-iso8601-time-string result))))))
+  (if (pinboard-too-soon :pinboard-last-updated 3)
+      pinboard-last-updated
+    (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
+      (when result
+        (setq pinboard-last-updated (float-time (decode-time (parse-iso8601-time-string result))))))))
 
 (defun pinboard-get-tags ()
   "Get the list of tags used by the user."
