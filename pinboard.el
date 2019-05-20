@@ -122,7 +122,7 @@ to help set rate limits."
       pinboard-last-updated
     (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
       (when result
-        (setq pinboard-last-updated (float-time (decode-time (parse-iso8601-time-string result))))))))
+        (setq pinboard-last-updated (float-time (parse-iso8601-time-string result)))))))
 
 (defun pinboard-get-tags ()
   "Get the list of tags used by the user."
