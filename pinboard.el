@@ -133,7 +133,7 @@ to help set rate limits."
         (setq pinboard-tags
               (pinboard-call
                (pinboard-api-url "tags" "get")
-               'pinboard-tags))
+               'pinboard-get-tags))
       ;; Looks like nothing has changed, so go with the tags we've already
       ;; got.
       pinboard-tags)))
