@@ -35,7 +35,7 @@ rate limits in the Pinboard API). Expect this to go wrong.
 
 ## TODO
 
-- [ ] Filter by tags.
+- [X] Filter by tags.
 - [ ] View tag list/cloud.
 - [ ] Add a pin.
 - [ ] Edit a pin.
