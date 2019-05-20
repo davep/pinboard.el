@@ -276,12 +276,13 @@ The title, description and tags are all searched. Search is case-insensitive."
     (pinboard-redraw
      (lambda (pin)
        (string-match-p (regexp-quote text)
-                       (concat
-                        (alist-get 'description pin)
-                        " "
-                        (alist-get 'extended pin)
-                        " "
-                        (alist-get 'tags pin)))))))
+                       (downcase
+                        (concat
+                         (alist-get 'description pin)
+                         " "
+                         (alist-get 'extended pin)
+                         " "
+                         (alist-get 'tags pin))))))))
 
 (defun pinboard-refresh ()
   "Refresh the list."
