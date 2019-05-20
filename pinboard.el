@@ -267,6 +267,22 @@ FILTER."
      (lambda (pin)
        (seq-contains (split-string (alist-get 'tags pin)) tag)))))
 
+(defun pinboard-search (text)
+  "Only show pins that contain TEXT somewhere.
+
+The title, description and tags are all searched. Search is case-insensitive."
+  (interactive "sText: ")
+  (let ((text (downcase text)))
+    (pinboard-redraw
+     (lambda (pin)
+       (string-match-p (regexp-quote text)
+                       (concat
+                        (alist-get 'description pin)
+                        " "
+                        (alist-get 'extended pin)
+                        " "
+                        (alist-get 'tags pin)))))))
+
 (defun pinboard-refresh ()
   "Refresh the list."
   (interactive)
@@ -283,6 +299,7 @@ FILTER."
     (define-key map "u"         #'pinboard-unread)
     (define-key map "r"         #'pinboard-read)
     (define-key map "t"         #'pinboard-tagged)
+    (define-key map "/"         #'pinboard-search)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
     map)
