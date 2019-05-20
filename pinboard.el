@@ -36,12 +36,12 @@
   "Pinboard client for Emacs."
   :group 'hypermedia)
 
-(defcustom pinboard-private-symbol "\u2022"
+(defcustom pinboard-private-symbol "-"
   "The character to use to show a pin is private."
   :type 'string
   :group 'pinboard)
 
-(defcustom pinboard-public-symbol "\u25e6"
+(defcustom pinboard-public-symbol " "
   "The character to use to show a pin is public."
   :type 'string
   :group 'pinboard)
