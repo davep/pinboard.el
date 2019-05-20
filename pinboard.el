@@ -133,7 +133,7 @@ to help set rate limits."
     ;; We're not calling on Pinboard too soon. So, next up, let's see if
     ;; pins have been updated since we last called for tags, or if we simply
     ;; don't have any tags yet...
-    (if (or (not pinboard-tags) (< (pinboard-last-called 'pinboard-get-tags) (pinboard-last-updated)))
+    (if (or (not pinboard-tags) (< (pinboard-last-called :pinboard-get-tags) (pinboard-last-updated)))
         ;; ...grab a copy of the user's tags.
         (setq pinboard-tags
               (pinboard-call
@@ -153,7 +153,7 @@ to help set rate limits."
     ;; before too. If we don't have any pins yet (normally not an issue at
     ;; this point, but useful for testing), or pins have been updated more
     ;; recently...
-    (if (or (not pinboard-pins) (< (pinboard-last-called 'pinboard-all-posts) (pinboard-last-updated)))
+    (if (or (not pinboard-pins) (< (pinboard-last-called :pinboard-all-posts) (pinboard-last-updated)))
         ;; ...grab a fresh copy.
         (setq pinboard-pins
               (pinboard-call
