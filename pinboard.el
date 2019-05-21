@@ -239,7 +239,7 @@ FILTER."
           (insert
            "\n\n"
            (pinboard-caption "Time") "\n"
-           (alist-get 'time pin) "\n\n"
+           (funcall pinboard-time-format-function (alist-get 'time pin)) "\n\n"
            (pinboard-caption "Public") "\n"
            (capitalize (alist-get 'shared pin)) "\n\n"
            (pinboard-caption "Unread") "\n"
