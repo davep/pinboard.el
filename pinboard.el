@@ -48,6 +48,13 @@
   :type 'string
   :group 'pinboard)
 
+(defcustom pinboard-time-format-function
+  (lambda (time)
+    (format-time-string "%Y-%m-%d %H:%M:%S" (parse-iso8601-time-string time)))
+  "The function to use to format the time of a pin in the list."
+  :type 'function
+  :group 'pinboard)
+
 (defface pinboard-caption
   '((t :inherit (bold font-lock-function-name-face)))
   "Face used on captions in the Pinboard output windows."
@@ -185,6 +192,7 @@ FILTER."
                         pinboard-public-symbol
                       pinboard-private-symbol)
                     (alist-get 'description pin)
+                    (funcall pinboard-time-format-function (alist-get 'time pin))
                     (alist-get 'href pin))))
                 (seq-filter (or filter #'identity) (pinboard-get-pins))))
   (tabulated-list-print t))
@@ -310,9 +318,10 @@ The title, description and tags are all searched. Search is case-insensitive."
   (setq tabulated-list-format
         [("P" 1 t)
          ("Description" 60 t)
+         ("Time" 20 t)
          ("URL" 30 t)])
   (tabulated-list-init-header)
-  (setq tabulated-list-sort-key '("Description")))
+  (setq tabulated-list-sort-key '("Time" . t)))
 
 ;;;###autoload
 (defun pinboard ()
