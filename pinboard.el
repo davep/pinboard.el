@@ -273,7 +273,7 @@ FILTER."
   (let ((tag (downcase tag)))
     (pinboard-redraw
      (lambda (pin)
-       (seq-contains (split-string (alist-get 'tags pin)) tag)))))
+       (seq-contains (split-string (downcase (alist-get 'tags pin))) tag)))))
 
 (defun pinboard-search (text)
   "Only show pins that contain TEXT somewhere.
