@@ -145,22 +145,22 @@ to help set rate limits."
       ;; got.
       pinboard-tags)))
 
-(defun pinboard-all-posts ()
-  "Return all of the user's posts on Pinboard."
+(defun pinboard-get-pins ()
+  "Return all of the user's pins on Pinboard."
   ;; If we're calling on the list within 5 minutes of a previous call, just
   ;; go with what we've got (see the rate limits in the Pinboard API).
-  (if (pinboard-too-soon :pinboard-all-posts 300)
+  (if (pinboard-too-soon :pinboard-get-pins 300)
       pinboard-pins
     ;; Okay, we're not calling too soon. This also suggests we've called
     ;; before too. If we don't have any pins yet (normally not an issue at
     ;; this point, but useful for testing), or pins have been updated more
     ;; recently...
-    (if (or (not pinboard-pins) (< (pinboard-last-called :pinboard-all-posts) (pinboard-last-updated)))
+    (if (or (not pinboard-pins) (< (pinboard-last-called :pinboard-get-pins) (pinboard-last-updated)))
         ;; ...grab a fresh copy.
         (setq pinboard-pins
               (pinboard-call
                (pinboard-api-url "posts" "all")
-               :pinboard-all-posts))
+               :pinboard-get-pins))
       ;; Looks like nothing has changed. Return what we've got.
       pinboard-pins)))
 
@@ -169,7 +169,7 @@ to help set rate limits."
   (seq-find
    (lambda (pin)
      (string= (alist-get 'hash pin) hash))
-   pinboard-pins))
+   (pinboard-get-pins)))
 
 (defun pinboard-redraw (&optional filter)
   "Redraw the pin list.
@@ -186,7 +186,7 @@ FILTER."
                       pinboard-private-symbol)
                     (alist-get 'description pin)
                     (alist-get 'href pin))))
-                (seq-filter (or filter #'identity) pinboard-pins)))
+                (seq-filter (or filter #'identity) (pinboard-get-pins))))
   (tabulated-list-print t))
 
 (defun pinboard-open ()
@@ -287,7 +287,6 @@ The title, description and tags are all searched. Search is case-insensitive."
 (defun pinboard-refresh ()
   "Refresh the list."
   (interactive)
-  (pinboard-all-posts)
   (pinboard-redraw))
 
 (defvar pinboard-mode-map
