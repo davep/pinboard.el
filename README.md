@@ -1,6 +1,8 @@
 # pinboard.el
 
-The start of an Emacs client for [Pinboard](https://pinboard.in/).
+## Commentary:
+
+`pinboard.el` is an Emacs client for [Pinboard](https://pinboard.in/).
 
 Currently the early days of a work in progress. As such, if you play with it
 right now, don't be shocked if something is missing or plain broken.
@@ -35,7 +37,9 @@ rate limits in the Pinboard API). Expect this to go wrong.
 
 ## TODO
 
-- [X] Filter by tags.
+The initial release is all about getting viewing and reading of pins up and
+going. Here's what I planning on doing as time goes on:
+
 - [ ] View tag list/cloud.
 - [ ] Add a pin.
 - [ ] Edit a pin.

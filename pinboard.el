@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 ;;
-;; pinboard.el provides a simple client for pinboard.in.
+;; pinboard.el provides an Emacs client for pinboard.in.
 
 ;;; Code:
 
