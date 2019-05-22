@@ -23,6 +23,7 @@ as I get time to work on it. Current commands available in the list include:
 | Command            | Key | Description                                 |
 |--------------------|-----|---------------------------------------------|
 | `pinboard-refresh` | g   | Refresh the list, showing all pins          |
+| `pinboard-kil-url` | k   | Add pin's URL to the `kill-ring`.           |
 | `pinboard-unread`  | u   | Show only unread pins in the list           |
 | `pinboard-tagged`  | t   | Show only pins that have a given tag        |
 | `pinboard-search`  | /   | Show only pins that contain the search text |

@@ -206,6 +206,17 @@ FILTER."
           (browse-url (alist-get 'href pin))
         (error "Could not find pin %s" (tabulated-list-get-id))))))
 
+(defun pinboard-kill-url ()
+  "Add the current pin's URL to the `kill-ring'."
+  (interactive)
+  (when (tabulated-list-get-id)
+    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
+      (if pin
+          (progn
+            (kill-new (alist-get 'href pin))
+            (message "URL copied to the kill ring"))
+        (error "Could not find pin %s" (tabulated-list-get-id))))))
+
 (defun pinboard-caption (s)
   "Add properties to S to make it a caption for Pinboard output."
   (propertize (concat s ": ") 'font-lock-face 'pinboard-caption))
@@ -301,6 +312,7 @@ The title, description and tags are all searched. Search is case-insensitive."
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
     (define-key map "a"         #'pinboard-refresh)
+    (define-key map "k"         #'pinboard-kill-url)
     (define-key map "g"         #'pinboard-refresh)
     (define-key map "p"         #'pinboard-public)
     (define-key map "P"         #'pinboard-private)
