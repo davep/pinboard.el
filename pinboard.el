@@ -197,25 +197,29 @@ FILTER."
                 (seq-filter (or filter #'identity) (pinboard-get-pins))))
   (tabulated-list-print t))
 
+(defmacro pinboard-with-current-pin (name &rest body)
+  "Evaluate BODY with the currently-selected pin as NAME."
+  (declare (indent 1))
+  (let ((pin-id (gensym)))
+    `(let ((,pin-id  (tabulated-list-get-id)))
+       (when ,pin-id
+         (let ((,name (pinboard-find-pin ,pin-id)))
+           (if ,name
+               (progn ,@body)
+             (error "Could not find pin %s" (tabulated-list-get-id))))))))
+
 (defun pinboard-open ()
   "Open the currently-highlighted pin in a web browser."
   (interactive)
-  (when (tabulated-list-get-id)
-    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
-      (if pin
-          (browse-url (alist-get 'href pin))
-        (error "Could not find pin %s" (tabulated-list-get-id))))))
+  (pinboard-with-current-pin pin
+    (browse-url (alist-get 'href pin))))
 
 (defun pinboard-kill-url ()
   "Add the current pin's URL to the `kill-ring'."
   (interactive)
-  (when (tabulated-list-get-id)
-    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
-      (if pin
-          (progn
-            (kill-new (alist-get 'href pin))
-            (message "URL copied to the kill ring"))
-        (error "Could not find pin %s" (tabulated-list-get-id))))))
+  (pinboard-with-current-pin pin
+    (kill-new (alist-get 'href pin))
+    (message "URL copied to the kill ring")))
 
 (defun pinboard-caption (s)
   "Add properties to S to make it a caption for Pinboard output."
