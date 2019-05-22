@@ -289,6 +289,11 @@ FILTER."
      (lambda (pin)
        (seq-contains (split-string (downcase (alist-get 'tags pin))) tag)))))
 
+(defun pinboard-untagged ()
+  "Only show pints that have no tags."
+  (interactive)
+  (pinboard-redraw (lambda (pin) (zerop (length (alist-get 'tags pin ""))))))
+
 (defun pinboard-search (text)
   "Only show pins that contain TEXT somewhere.
 
@@ -322,6 +327,7 @@ The title, description and tags are all searched. Search is case-insensitive."
     (define-key map "u"         #'pinboard-unread)
     (define-key map "r"         #'pinboard-read)
     (define-key map "t"         #'pinboard-tagged)
+    (define-key map "T"         #'pinboard-untagged)
     (define-key map "/"         #'pinboard-search)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
