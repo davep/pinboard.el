@@ -20,17 +20,17 @@ Once done, you can <kbd>M-x</kbd> <kbd>pinboard</kbd> <kbd>RET</kbd> and
 browse your pins. The client is currently very feature-poor, but expanding
 as I get time to work on it. Current commands available in the list include:
 
-| Command            | Key | Description                                 |
-|--------------------|-----|---------------------------------------------|
-| `pinboard-refresh` | g   | Refresh the list, showing all pins          |
-| `pinboard-kil-url` | k   | Add pin's URL to the `kill-ring`.           |
-| `pinboard-unread`  | u   | Show only unread pins in the list           |
-| `pinboard-tagged`  | t   | Show only pins that have a given tag        |
-| `pinboard-search`  | /   | Show only pins that contain the search text |
-| `pinboard-view`    | SPC | View the data for a pin in a window         |
-| `pinboard-public`  | p   | Show only public pins in the list           |
-| `pinboard-private` | P   | Show only private pins in the list          |
-| `pinboard-open`    | RET | Open the pin's URL in a web browser         |
+| Command             | Key | Description                                 |
+|---------------------|-----|---------------------------------------------|
+| `pinboard-refresh`  | g   | Refresh the list, showing all pins          |
+| `pinboard-kill-url` | k   | Add pin's URL to the `kill-ring`.           |
+| `pinboard-unread`   | u   | Show only unread pins in the list           |
+| `pinboard-tagged`   | t   | Show only pins that have a given tag        |
+| `pinboard-search`   | /   | Show only pins that contain the search text |
+| `pinboard-view`     | SPC | View the data for a pin in a window         |
+| `pinboard-public`   | p   | Show only public pins in the list           |
+| `pinboard-private`  | P   | Show only private pins in the list          |
+| `pinboard-open`     | RET | Open the pin's URL in a web browser         |
 
 The code only works with all pins right now, and does its best to ensure
 that the list is never requested more than once every 5 minutes (as per the
