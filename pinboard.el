@@ -49,8 +49,8 @@
   :group 'pinboard)
 
 (defcustom pinboard-time-format-function
-  (lambda (time)
-    (format-time-string "%Y-%m-%d %H:%M:%S" (parse-iso8601-time-string time)))
+  '(lambda (time)
+     (format-time-string "%Y-%m-%d %H:%M:%S" (parse-iso8601-time-string time)))
   "The function to use to format the time of a pin in the list."
   :type 'function
   :group 'pinboard)
