@@ -201,11 +201,11 @@ FILTER."
   "Evaluate BODY with the currently-selected pin as NAME."
   (declare (indent 1))
   (let ((pin-id (gensym)))
-    `(when-let* ((,pin-id  (tabulated-list-get-id))
-                 (,name (pinboard-find-pin ,pin-id)))
-       (if ,name
-           (progn ,@body)
-         (error "Could not find pin %s" (tabulated-list-get-id))))))
+    `(when-let ((,pin-id  (tabulated-list-get-id)))
+       (let ((,name (pinboard-find-pin ,pin-id)))
+         (if ,name
+             (progn ,@body)
+           (error "Could not find pin %s" (tabulated-list-get-id)))))))
 
 (defun pinboard-open ()
   "Open the currently-highlighted pin in a web browser."
