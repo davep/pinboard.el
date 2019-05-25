@@ -30,7 +30,10 @@
 (require 'json)
 (require 'subr-x)
 (require 'url-vars)
+(require 'widget)
+(require 'wid-edit)
 (require 'browse-url)
+(require 'url-util)
 (require 'parse-time)
 (require 'auth-source)
 
@@ -112,6 +115,16 @@ See if we're calling CALLER before RATE has expired."
 (defun pinboard-api-url (&rest params)
   "Build the API call from PARAMS."
   (format pinboard-api-url (string-join params "/") pinboard-api-token))
+
+(defun pinboard-with-params (url &rest params)
+  "Combine URL with PARAMS to make a new URL."
+  (format "%s&%s"
+          url
+          (string-join
+           (mapcar (lambda (param)
+                     (format "%s=%s" (car param) (url-hexify-string (cdr param))))
+                   params)
+           "&")))
 
 (defun pinboard-call (url caller)
   "Call on URL and return the data.
@@ -354,6 +367,79 @@ The title, description and tags are all searched. Search is case-insensitive."
     (pop-to-buffer "*Pinboard*")
     (pinboard-mode)
     (pinboard-refresh)))
+
+(defmacro pinboard-field (suffix widget)
+  "Create a Pinboard field for a form.
+
+The field name will be pinboard-field- followed by SUFFIX, and
+its value will be set to WIDGET."
+  (let ((name (intern (format "pinboard-field-%s" suffix))))
+    `(progn
+       (make-local-variable (defvar ,name))
+       (setq ,name ,widget))))
+
+(defun pinboard-save-new (url title description tags private to-read)
+  "Save a new pin to Pinboard.
+
+The following values are added:
+
+URL         - The URL of the pin.
+TITLE       - The title to give the pin.
+DESCRIPTION - The longer description to give the pin.
+TAGS        - The tags of the pin.
+PRIVATE     - Is the pin private or not?
+TO-READ     - Should the pin be marked has having being read or not?"
+  (pinboard-call
+   (pinboard-with-params
+    (pinboard-api-url "posts" "add")
+    (cons 'url url)
+    (cons 'description title)
+    (cons 'extended description)
+    (cons 'tags tags)
+    (cons 'shared (if private "no" "yes"))
+    (cons 'toread (if to-read "yes" "no")))
+   :pinboard-save-new)
+  (message "Saved %s to Pinboard" url))
+
+;;;###autoload
+(defun pinboard-add ()
+  "Add a new pin to Pinboard."
+  (interactive)
+  (pinboard-auth)
+  (let ((buffer-name "*Pinboard: New pin*"))
+    (when (get-buffer buffer-name)
+      (kill-buffer buffer-name))
+    (let ((buffer (get-buffer-create buffer-name)))
+      (with-current-buffer buffer
+        (widget-insert "Add a new pin to Pinboard\n\n")
+        (pinboard-field url (widget-create 'editable-field :size 80 :format "URL:\n%v"))
+        (pinboard-field title (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"))
+        (pinboard-field description (widget-create 'text :size 80 :format "\nDescription:\n%v"))
+        (pinboard-field tags (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"))
+        (widget-insert "\n\nPrivate: ")
+        (pinboard-field private (widget-create 'checkbox t))
+        (widget-insert " To Read: ")
+        (pinboard-field to-read (widget-create 'checkbox t))
+        (widget-insert "\n\n")
+        (widget-create 'push-button
+                       :notify
+                       (lambda (&rest _)
+                         (pinboard-save-new
+                          (widget-value pinboard-field-url)
+                          (widget-value pinboard-field-title)
+                          (widget-value pinboard-field-description)
+                          (widget-value pinboard-field-tags)
+                          (widget-value pinboard-field-private)
+                          (widget-value pinboard-field-to-read)))
+                       "Save")
+        (widget-insert " ")
+        (widget-create 'push-button
+                       :notify (lambda (&rest _) (kill-buffer buffer))
+                       "Cancel")
+        (widget-insert "\n")
+        (use-local-map widget-keymap)
+        (widget-setup)
+        (switch-to-buffer buffer)))))
 
 (provide 'pinboard)
 
