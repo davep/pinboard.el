@@ -20,19 +20,19 @@ Once done, you can <kbd>M-x</kbd> <kbd>pinboard</kbd> <kbd>RET</kbd> and
 browse your pins. The client is currently very feature-poor, but expanding
 as I get time to work on it. Current commands available in the list include:
 
-| Command             | Key | Description                                 |
-|---------------------|-----|---------------------------------------------|
-| `pinboard-refresh`  | g   | Refresh the list, showing all pins          |
-| `pinboard-kill-url` | k   | Add pin's URL to the `kill-ring`.           |
-| `pinboard-unread`   | u   | Show only unread pins in the list           |
-| `pinboard-read`     | r   | Show only read pins in the list             |
-| `pinboard-tagged`   | t   | Show only pins that have a given tag        |
-| `pinboard-untagged` | T   | Show only pins that have no tag             |
-| `pinboard-search`   | /   | Show only pins that contain the search text |
-| `pinboard-view`     | SPC | View the data for a pin in a window         |
-| `pinboard-public`   | p   | Show only public pins in the list           |
-| `pinboard-private`  | P   | Show only private pins in the list          |
-| `pinboard-open`     | RET | Open the pin's URL in a web browser         |
+| Command             | Key            | Description                                 |
+|---------------------|----------------|---------------------------------------------|
+| `pinboard-refresh`  | <kbd>g</kbd>   | Refresh the list, showing all pins          |
+| `pinboard-kill-url` | <kbd>k</kbd>   | Add pin's URL to the `kill-ring`.           |
+| `pinboard-unread`   | <kbd>u</kbd>   | Show only unread pins in the list           |
+| `pinboard-read`     | <kbd>r</kbd>   | Show only read pins in the list             |
+| `pinboard-tagged`   | <kbd>t</kbd>   | Show only pins that have a given tag        |
+| `pinboard-untagged` | <kbd>T</kbd>   | Show only pins that have no tag             |
+| `pinboard-search`   | <kbd>/</kbd>   | Show only pins that contain the search text |
+| `pinboard-view`     | <kbd>SPC</kbd> | View the data for a pin in a window         |
+| `pinboard-public`   | <kbd>p</kbd>   | Show only public pins in the list           |
+| `pinboard-private`  | <kbd>P</kbd>   | Show only private pins in the list          |
+| `pinboard-open`     | <kbd>RET</kbd> | Open the pin's URL in a web browser         |
 
 The code only works with all pins right now, and does its best to ensure
 that the list is never requested more than once every 5 minutes (as per the
