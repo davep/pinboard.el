@@ -98,7 +98,9 @@ REPOSITORY!")
 (defun pinboard-too-soon (caller &optional rate)
   "Are we hitting on Pinboard too soon?
 
-See if we're calling CALLER before RATE has expired."
+See if we're calling CALLER before RATE has expired. RATE is
+optional and defaults to 3 seconds (as per the pinboard API
+documentation.)"
   (let ((last (pinboard-last-called caller)))
     (when last
       (<= (- (float-time) last) (or rate 3)))))
