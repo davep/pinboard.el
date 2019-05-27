@@ -95,13 +95,13 @@ REPOSITORY!")
   "When was CALLER last called?"
   (or (get caller :pinboard-last-called) 0))
 
-(defun pinboard-too-soon (caller rate)
+(defun pinboard-too-soon (caller &optional rate)
   "Are we hitting on Pinboard too soon?
 
 See if we're calling CALLER before RATE has expired."
   (let ((last (pinboard-last-called caller)))
     (when last
-      (<= (- (float-time) last) rate))))
+      (<= (- (float-time) last) (or rate 3)))))
 
 (defun pinboard-auth ()
   "Attempt to get the API token for Pinboard."
@@ -140,7 +140,7 @@ to help set rate limits."
 
 (defun pinboard-last-updated ()
   "Get when Pinboard was last updated."
-  (if (pinboard-too-soon :pinboard-last-updated 3)
+  (if (pinboard-too-soon :pinboard-last-updated)
       pinboard-last-updated
     (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
       (when result
@@ -149,7 +149,7 @@ to help set rate limits."
 (defun pinboard-get-tags ()
   "Get the list of tags used by the user."
   ;; If it's within the 3 second rule...
-  (if (pinboard-too-soon :pinboard-get-tags 3)
+  (if (pinboard-too-soon :pinboard-get-tags)
       ;; ...just go with what we've got.
       pinboard-tags
     ;; We're not calling on Pinboard too soon. So, next up, let's see if
