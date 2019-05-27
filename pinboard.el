@@ -375,7 +375,7 @@ TO-READ     - Should the pin be marked has having being read or not?"
       (with-current-buffer buffer
         (widget-insert "Add a new pin to Pinboard\n\n")
         (pinboard-field url
-          (widget-create 'editable-field :size 80 :format "URL:\n%v" ""))
+          (widget-create 'editable-field :size 80 :format "URL:\n%v"))
         (pinboard-field title
           (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"))
         (pinboard-field description
