@@ -370,6 +370,8 @@ TO-READ     - Should the pin be marked has having being read or not?"
   "Add a new pin to Pinboard."
   (interactive)
   (pinboard-auth)
+  (when (pinboard-too-soon :pinboard-save-new)
+    (error "Too soon. Please try again in a few seconds"))
   (let ((buffer-name "*Pinboard: New pin*"))
     (when (get-buffer buffer-name)
       (kill-buffer buffer-name))
