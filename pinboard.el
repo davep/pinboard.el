@@ -329,50 +329,12 @@ The title, description and tags are all searched. Search is case-insensitive."
   (interactive)
   (pinboard-redraw))
 
-(defvar pinboard-mode-map
-  (let ((map (make-sparse-keymap)))
-    (suppress-keymap map t)
-    (define-key map "a"         #'pinboard-refresh)
-    (define-key map "k"         #'pinboard-kill-url)
-    (define-key map "g"         #'pinboard-refresh)
-    (define-key map "p"         #'pinboard-public)
-    (define-key map "P"         #'pinboard-private)
-    (define-key map "u"         #'pinboard-unread)
-    (define-key map "r"         #'pinboard-read)
-    (define-key map "t"         #'pinboard-tagged)
-    (define-key map "T"         #'pinboard-untagged)
-    (define-key map "/"         #'pinboard-search)
-    (define-key map " "         #'pinboard-view)
-    (define-key map (kbd "RET") #'pinboard-open)
-    map)
-  "Local keymap for `pinboard'.")
-
-(define-derived-mode pinboard-mode tabulated-list-mode "Pinboard Mode"
-  "Major mode for handling a list of Pinboard pins."
-  (setq tabulated-list-format
-        [("P" 1 t)
-         ("Description" 60 t)
-         ("Time" 20 t)
-         ("URL" 30 t)])
-  (tabulated-list-init-header)
-  (setq tabulated-list-sort-key '("Time" . t)))
-
-;;;###autoload
-(defun pinboard ()
-  "Browse your Pinboard pins."
-  (interactive)
-  (pinboard-auth)
-  (if (not pinboard-api-token)
-      (error "Please set your Pinboard API token")
-    (pop-to-buffer "*Pinboard*")
-    (pinboard-mode)
-    (pinboard-refresh)))
-
 (defmacro pinboard-field (suffix widget)
   "Create a Pinboard field for a form.
 
 The field name will be pinboard-field- followed by SUFFIX, and
 its value will be set to WIDGET."
+  (declare (indent 1))
   (let ((name (intern (format "pinboard-field-%s" suffix))))
     `(progn
        (make-local-variable (defvar ,name))
@@ -412,14 +374,20 @@ TO-READ     - Should the pin be marked has having being read or not?"
     (let ((buffer (get-buffer-create buffer-name)))
       (with-current-buffer buffer
         (widget-insert "Add a new pin to Pinboard\n\n")
-        (pinboard-field url (widget-create 'editable-field :size 80 :format "URL:\n%v"))
-        (pinboard-field title (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"))
-        (pinboard-field description (widget-create 'text :size 80 :format "\nDescription:\n%v"))
-        (pinboard-field tags (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"))
+        (pinboard-field url
+          (widget-create 'editable-field :size 80 :format "URL:\n%v" ""))
+        (pinboard-field title
+          (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"))
+        (pinboard-field description
+          (widget-create 'text :size 80 :format "\nDescription:\n%v"))
+        (pinboard-field tags
+          (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"))
         (widget-insert "\n\nPrivate: ")
-        (pinboard-field private (widget-create 'checkbox t))
+        (pinboard-field private
+          (widget-create 'checkbox t))
         (widget-insert " To Read: ")
-        (pinboard-field to-read (widget-create 'checkbox t))
+        (pinboard-field to-read
+          (widget-create 'checkbox t))
         (widget-insert "\n\n")
         (widget-create 'push-button
                        :notify
@@ -442,6 +410,45 @@ TO-READ     - Should the pin be marked has having being read or not?"
         (switch-to-buffer buffer)
         (setf (point) (point-min))
         (widget-forward 1)))))
+
+(defvar pinboard-mode-map
+  (let ((map (make-sparse-keymap)))
+    (suppress-keymap map t)
+    (define-key map "a"         #'pinboard-refresh)
+    (define-key map "k"         #'pinboard-kill-url)
+    (define-key map "g"         #'pinboard-refresh)
+    (define-key map "p"         #'pinboard-public)
+    (define-key map "P"         #'pinboard-private)
+    (define-key map "u"         #'pinboard-unread)
+    (define-key map "r"         #'pinboard-read)
+    (define-key map "t"         #'pinboard-tagged)
+    (define-key map "T"         #'pinboard-untagged)
+    (define-key map "/"         #'pinboard-search)
+    (define-key map " "         #'pinboard-view)
+    (define-key map (kbd "RET") #'pinboard-open)
+    map)
+  "Local keymap for `pinboard'.")
+
+(define-derived-mode pinboard-mode tabulated-list-mode "Pinboard Mode"
+  "Major mode for handling a list of Pinboard pins."
+  (setq tabulated-list-format
+        [("P" 1 t)
+         ("Description" 60 t)
+         ("Time" 20 t)
+         ("URL" 30 t)])
+  (tabulated-list-init-header)
+  (setq tabulated-list-sort-key '("Time" . t)))
+
+;;;###autoload
+(defun pinboard ()
+  "Browse your Pinboard pins."
+  (interactive)
+  (pinboard-auth)
+  (if (not pinboard-api-token)
+      (error "Please set your Pinboard API token")
+    (pop-to-buffer "*Pinboard*")
+    (pinboard-mode)
+    (pinboard-refresh)))
 
 (provide 'pinboard)
 
