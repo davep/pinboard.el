@@ -426,6 +426,7 @@ TO-READ     - Should the pin be marked has having being read or not?"
     (define-key map "/"         #'pinboard-search)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
+    (define-key map "n"         #'pinboard-add)
     map)
   "Local keymap for `pinboard'.")
 

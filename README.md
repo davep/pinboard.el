@@ -28,6 +28,7 @@ as I get time to work on it. Current commands available in the list include:
 | `pinboard-read`     | <kbd>r</kbd>   | Show only read pins in the list             |
 | `pinboard-tagged`   | <kbd>t</kbd>   | Show only pins that have a given tag        |
 | `pinboard-untagged` | <kbd>T</kbd>   | Show only pins that have no tag             |
+| `pinboard-untagged` | <kbd>n</kbd>   | Add a new pin                               |
 | `pinboard-search`   | <kbd>/</kbd>   | Show only pins that contain the search text |
 | `pinboard-view`     | <kbd>SPC</kbd> | View the data for a pin in a window         |
 | `pinboard-public`   | <kbd>p</kbd>   | Show only public pins in the list           |
