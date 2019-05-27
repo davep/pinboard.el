@@ -439,7 +439,9 @@ TO-READ     - Should the pin be marked has having being read or not?"
         (widget-insert "\n")
         (use-local-map widget-keymap)
         (widget-setup)
-        (switch-to-buffer buffer)))))
+        (switch-to-buffer buffer)
+        (setf (point) (point-min))
+        (widget-forward 1)))))
 
 (provide 'pinboard)
 
