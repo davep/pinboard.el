@@ -340,7 +340,7 @@ its value will be set to WIDGET."
        (make-local-variable (defvar ,name))
        (setq ,name ,widget))))
 
-(defun pinboard-save-new (url title description tags private to-read)
+(defun pinboard-save (url title description tags private to-read)
   "Save a new pin to Pinboard.
 
 The following values are added:
@@ -360,19 +360,16 @@ TO-READ     - Should the pin be marked has having being read or not?"
     (cons 'tags tags)
     (cons 'shared (if private "no" "yes"))
     (cons 'toread (if to-read "yes" "no")))
-   :pinboard-save-new)
+   :pinboard-save)
   (message "Saved %s to Pinboard" url))
 
-(defun pinboard-make-form (buffer-name title saver &optional pin)
+(defun pinboard-make-form (buffer-name title &optional pin)
   "Make a pinboard edit form in the current buffer.
 
 A new buffer is created, with a name based around BUFFER-NAME.
 
 TITLE is shown at the top of the form and the form is optionally
-populated with the values of PIN.
-
-The save button will call the function SAVER, passing the pin's
-values."
+populated with the values of PIN."
   (let ((form-buffer-name (format "*Pinboard: %s*" buffer-name)))
     (when (get-buffer form-buffer-name)
       (kill-buffer form-buffer-name))
@@ -403,13 +400,13 @@ values."
         (widget-create 'push-button
                        :notify
                        (lambda (&rest _)
-                         (funcall saver
-                                  (widget-value pinboard-field-url)
-                                  (widget-value pinboard-field-title)
-                                  (widget-value pinboard-field-description)
-                                  (widget-value pinboard-field-tags)
-                                  (widget-value pinboard-field-private)
-                                  (widget-value pinboard-field-to-read))
+                         (pinboard-save
+                          (widget-value pinboard-field-url)
+                          (widget-value pinboard-field-title)
+                          (widget-value pinboard-field-description)
+                          (widget-value pinboard-field-tags)
+                          (widget-value pinboard-field-private)
+                          (widget-value pinboard-field-to-read))
                          (kill-buffer buffer))
                        "Save")
         (widget-insert " ")
@@ -428,23 +425,18 @@ values."
   "Add a new pin to Pinboard."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-save-new)
+  (if (pinboard-too-soon :pinboard-save)
       (error "Too soon. Please try again in a few seconds")
-    (pinboard-make-form "New pin"
-                        "Add a new pin to Pinboard"
-                        #'pinboard-save-new)))
+    (pinboard-make-form "New pin" "Add a new pin to Pinboard")))
 
 (defun pinboard-edit ()
   "Edit the current pin in the pin list."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-save-new)
+  (if (pinboard-too-soon :pinboard-save)
       (error "Too soon. Please try again in a few seconds")
     (pinboard-with-current-pin pin
-      (pinboard-make-form "Edit pin"
-                          "Edit the pin"
-                          #'pinboard-save-new
-                          pin))))
+      (pinboard-make-form "Edit pin" "Edit the pin" pin))))
 
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
