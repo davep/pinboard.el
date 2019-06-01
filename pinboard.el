@@ -436,6 +436,18 @@ values."
                         "Add a new pin to Pinboard"
                         #'pinboard-save-new)))
 
+(defun pinboard-edit ()
+  "Edit the current pin in the pin list."
+  (interactive)
+  (pinboard-auth)
+  (if (pinboard-too-soon :pinboard-save-new)
+      (error "Too soon. Please try again in a few seconds")
+    (pinboard-with-current-pin pin
+      (pinboard-make-form "Edit pin"
+                          "Edit the pin"
+                          #'pinboard-save-new
+                          pin))))
+
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
@@ -452,6 +464,7 @@ values."
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
     (define-key map "n"         #'pinboard-add)
+    (define-key map "e"         #'pinboard-edit)
     map)
   "Local keymap for `pinboard'.")
 

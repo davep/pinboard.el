@@ -29,6 +29,7 @@ as I get time to work on it. Current commands available in the list include:
 | `pinboard-tagged`   | <kbd>t</kbd>   | Show only pins that have a given tag        |
 | `pinboard-untagged` | <kbd>T</kbd>   | Show only pins that have no tag             |
 | `pinboard-add`      | <kbd>n</kbd>   | Add a new pin                               |
+| `pinboard-edit`     | <kbd>e</kbd>   | Edit the current pin                        |
 | `pinboard-search`   | <kbd>/</kbd>   | Show only pins that contain the search text |
 | `pinboard-view`     | <kbd>SPC</kbd> | View the data for a pin in a window         |
 | `pinboard-public`   | <kbd>p</kbd>   | Show only public pins in the list           |
