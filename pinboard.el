@@ -412,7 +412,8 @@ values."
                                   (widget-value pinboard-field-description)
                                   (widget-value pinboard-field-tags)
                                   (widget-value pinboard-field-private)
-                                  (widget-value pinboard-field-to-read)))
+                                  (widget-value pinboard-field-to-read))
+                         (kill-buffer buffer))
                        "Save")
         (widget-insert " ")
         (widget-create 'push-button
