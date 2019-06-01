@@ -187,6 +187,23 @@ to help set rate limits."
       ;; Looks like nothing has changed. Return what we've got.
       pinboard-pins)))
 
+(defun pinboard-delete-pin (href)
+  "Delete the pin for HREF."
+  ;; Get the API to delete it on the server.
+  (pinboard-call
+   (pinboard-with-params
+    (pinboard-api-url "posts" "delete")
+    (cons 'url href))
+   :pinboard-delete-pin)
+  ;; Filter out any versions held locally.
+  (when pinboard-pins
+    (setq pinboard-pins
+          (seq-remove (lambda (pin)
+                        (string= (alist-get 'href pin) href))
+                      pinboard-pins)))
+  ;; Let the user know we did it.
+  (message "Delete \"%s\"." href))
+
 (defun pinboard-find-pin (via value)
   "Find and return the pin identified by VIA.
 
@@ -479,6 +496,16 @@ populated with the values of PIN."
     (pinboard-with-current-pin pin
       (pinboard-make-form "Edit pin" "Edit the pin" pin))))
 
+(defun pinboard-delete ()
+  "Delete the current pin in the pin list."
+  (interactive)
+  (pinboard-auth)
+  (if (pinboard-too-soon :pinboard-delete-pin)
+      (error "Too soon. Please try again in a few seconds")
+    (pinboard-with-current-pin pin
+      (when (y-or-n-p "Delete the current pin")
+        (pinboard-delete-pin (alist-get 'href pin))))))
+
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
@@ -496,6 +523,7 @@ populated with the values of PIN."
     (define-key map (kbd "RET") #'pinboard-open)
     (define-key map "n"         #'pinboard-add)
     (define-key map "e"         #'pinboard-edit)
+    (define-key map "d"         #'pinboard-delete)
     map)
   "Local keymap for `pinboard'.")
 

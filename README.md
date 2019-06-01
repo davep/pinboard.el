@@ -23,6 +23,7 @@ as I get time to work on it. Current commands available in the list include:
 | Command             | Key            | Description                                 |
 |---------------------|----------------|---------------------------------------------|
 | `pinboard-add`      | <kbd>n</kbd>   | Add a new pin                               |
+| `pinboard-delete`   | <kbd>d</kbd>   | Delete the current pin                      |
 | `pinboard-edit`     | <kbd>e</kbd>   | Edit the current pin                        |
 | `pinboard-kill-url` | <kbd>k</kbd>   | Add pin's URL to the `kill-ring`.           |
 | `pinboard-open`     | <kbd>RET</kbd> | Open the pin's URL in a web browser         |
@@ -42,16 +43,15 @@ rate limits in the Pinboard API). Expect this to go wrong.
 
 ## TODO
 
-The initial release is all about getting viewing and reading of pins up and
-going. Here's what I planning on doing as time goes on:
+Things to do (and things done):
 
 - [ ] View tag list/cloud.
 - [X] Add a pin.
 - [X] Have add locally update the list.
 - [X] Edit a pin.
 - [X] Have edit locally update the list.
-- [ ] Delete a pin.
-- [ ] Have delete locally update the list.
+- [X] Delete a pin.
+- [X] Have delete locally update the list.
 - [ ] Mark unread pin as read.
 - [ ] Notes viewing.
 - [ ] Stuff.
