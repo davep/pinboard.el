@@ -202,7 +202,7 @@ to help set rate limits."
                         (string= (alist-get 'href pin) href))
                       pinboard-pins)))
   ;; Let the user know we did it.
-  (message "Delete \"%s\"." href))
+  (message "Deleted \"%s\"." href))
 
 (defun pinboard-find-pin (via value)
   "Find and return the pin identified by VIA.
