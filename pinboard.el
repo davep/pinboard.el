@@ -366,33 +366,39 @@ TO-READ     - Should the pin be marked has having being read or not?"
    :pinboard-save-new)
   (message "Saved %s to Pinboard" url))
 
-;;;###autoload
-(defun pinboard-add ()
-  "Add a new pin to Pinboard."
-  (interactive)
-  (pinboard-auth)
-  (when (pinboard-too-soon :pinboard-save-new)
-    (error "Too soon. Please try again in a few seconds"))
-  (let ((buffer-name "*Pinboard: New pin*"))
-    (when (get-buffer buffer-name)
-      (kill-buffer buffer-name))
-    (let ((buffer (get-buffer-create buffer-name)))
+(defun pinboard-make-form (buffer-name title &optional pin)
+  "Make a pinboard edit form in the current buffer.
+
+A new buffer is created, with a name based around BUFFER-NAME.
+
+TITLE is shown at the top of the form and the form is optionally
+populated with the values of PIN."
+  (let ((form-buffer-name (format "*Pinboard: %s*" buffer-name)))
+    (when (get-buffer form-buffer-name)
+      (kill-buffer form-buffer-name))
+    (let ((buffer (get-buffer-create form-buffer-name)))
       (with-current-buffer buffer
-        (widget-insert "Add a new pin to Pinboard\n\n")
+        (widget-insert (format "%s\n\n" title))
         (pinboard-field url
-          (widget-create 'editable-field :size 80 :format "URL:\n%v"))
+          (widget-create 'editable-field :size 80 :format "URL:\n%v"
+                         (if pin (alist-get 'href pin) "")))
         (pinboard-field title
-          (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"))
+          (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"
+                         (if pin (alist-get 'description pin) "")))
         (pinboard-field description
-          (widget-create 'text :size 80 :format "\nDescription:\n%v"))
+          (widget-create 'text :size 80 :format "\nDescription:\n%v"
+                         (if pin (alist-get 'extended pin) "")))
         (pinboard-field tags
-          (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"))
+          (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"
+                         (if pin (alist-get 'tags pin) "")))
         (widget-insert "\n\nPrivate: ")
         (pinboard-field private
-          (widget-create 'checkbox t))
+          (widget-create 'checkbox
+                         (if pin (not (string= (alist-get 'shared pin) "yes")) t)))
         (widget-insert " To Read: ")
         (pinboard-field to-read
-          (widget-create 'checkbox t))
+          (widget-create 'checkbox
+                         (if pin (string= (alist-get 'toread pin) "yes") t)))
         (widget-insert "\n\n")
         (widget-create 'push-button
                        :notify
@@ -415,6 +421,15 @@ TO-READ     - Should the pin be marked has having being read or not?"
         (switch-to-buffer buffer)
         (setf (point) (point-min))
         (widget-forward 1)))))
+
+;;;###autoload
+(defun pinboard-add ()
+  "Add a new pin to Pinboard."
+  (interactive)
+  (pinboard-auth)
+  (if (pinboard-too-soon :pinboard-save-new)
+      (error "Too soon. Please try again in a few seconds")
+    (pinboard-make-form "New pin" "Add a new pin to Pinboard")))
 
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
