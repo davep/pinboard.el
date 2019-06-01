@@ -187,11 +187,13 @@ to help set rate limits."
       ;; Looks like nothing has changed. Return what we've got.
       pinboard-pins)))
 
-(defun pinboard-find-pin (hash)
-  "Find and return the pin identified by HASH."
+(defun pinboard-find-pin (via value)
+  "Find and return the pin identified by VIA.
+
+The pin is returned if VALUE matches."
   (seq-find
    (lambda (pin)
-     (string= (alist-get 'hash pin) hash))
+     (string= (alist-get via pin) value))
    (pinboard-get-pins)))
 
 (defun pinboard-redraw (&optional filter)
@@ -218,7 +220,7 @@ FILTER."
   (declare (indent 1))
   (let ((pin-id (gensym)))
     `(when-let ((,pin-id  (tabulated-list-get-id)))
-       (let ((,name (pinboard-find-pin ,pin-id)))
+       (let ((,name (pinboard-find-pin 'hash ,pin-id)))
          (if ,name
              (progn ,@body)
            (error "Could not find pin %s" (tabulated-list-get-id)))))))
