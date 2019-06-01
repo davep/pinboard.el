@@ -366,13 +366,16 @@ TO-READ     - Should the pin be marked has having being read or not?"
    :pinboard-save-new)
   (message "Saved %s to Pinboard" url))
 
-(defun pinboard-make-form (buffer-name title &optional pin)
+(defun pinboard-make-form (buffer-name title saver &optional pin)
   "Make a pinboard edit form in the current buffer.
 
 A new buffer is created, with a name based around BUFFER-NAME.
 
 TITLE is shown at the top of the form and the form is optionally
-populated with the values of PIN."
+populated with the values of PIN.
+
+The save button will call the function SAVER, passing the pin's
+values."
   (let ((form-buffer-name (format "*Pinboard: %s*" buffer-name)))
     (when (get-buffer form-buffer-name)
       (kill-buffer form-buffer-name))
@@ -403,13 +406,13 @@ populated with the values of PIN."
         (widget-create 'push-button
                        :notify
                        (lambda (&rest _)
-                         (pinboard-save-new
-                          (widget-value pinboard-field-url)
-                          (widget-value pinboard-field-title)
-                          (widget-value pinboard-field-description)
-                          (widget-value pinboard-field-tags)
-                          (widget-value pinboard-field-private)
-                          (widget-value pinboard-field-to-read)))
+                         (funcall saver
+                                  (widget-value pinboard-field-url)
+                                  (widget-value pinboard-field-title)
+                                  (widget-value pinboard-field-description)
+                                  (widget-value pinboard-field-tags)
+                                  (widget-value pinboard-field-private)
+                                  (widget-value pinboard-field-to-read)))
                        "Save")
         (widget-insert " ")
         (widget-create 'push-button
@@ -429,7 +432,9 @@ populated with the values of PIN."
   (pinboard-auth)
   (if (pinboard-too-soon :pinboard-save-new)
       (error "Too soon. Please try again in a few seconds")
-    (pinboard-make-form "New pin" "Add a new pin to Pinboard")))
+    (pinboard-make-form "New pin"
+                        "Add a new pin to Pinboard"
+                        #'pinboard-save-new)))
 
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
