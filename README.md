@@ -46,9 +46,12 @@ The initial release is all about getting viewing and reading of pins up and
 going. Here's what I planning on doing as time goes on:
 
 - [ ] View tag list/cloud.
-- [ ] Add a pin.
-- [ ] Edit a pin.
+- [X] Add a pin.
+- [ ] Have add locally update the list.
+- [X] Edit a pin.
+- [ ] Have edit locally update the list.
 - [ ] Delete a pin.
+- [ ] Have delete locally update the list.
 - [ ] Mark unread pin as read.
 - [ ] Notes viewing.
 - [ ] Stuff.
