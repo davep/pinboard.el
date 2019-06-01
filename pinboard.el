@@ -342,6 +342,41 @@ its value will be set to WIDGET."
        (make-local-variable (defvar ,name))
        (setq ,name ,widget))))
 
+(defun pinboard-refresh-locally (url title description tags private to-read)
+  "Refresh the local list of pins with the given information.
+
+Parameters are:
+
+URL         - The URL of the pin.
+TITLE       - The title to give the pin.
+DESCRIPTION - The longer description to give the pin.
+TAGS        - The tags of the pin.
+PRIVATE     - Is the pin private or not?
+TO-READ     - Should the pin be marked has having being read or not?
+
+This function updates the local copy of the pins held in
+`pinboard-pins' (which should always be accessed via
+`pinboard-get-pins'). If the URL already exists in
+`pinboard-pins' the entry will be updated, otherwise a new pin
+will be added to `pinboard-pins'."
+  ;; Does the URL currently exist in our local list?
+  (let ((pin (pinboard-find-pin 'href url)))
+    (setf (alist-get 'href pin) url)
+    (setf (alist-get 'description pin) title)
+    (setf (alist-get 'extended pin) description)
+    (setf (alist-get 'tags pin) tags)
+    (setf (alist-get 'shared pin) (if private "no" "yes"))
+    (setf (alist-get 'toread pin) (if to-read "yes" "no"))
+    ;; If we don't have it locally yet, it's either a new URL or a changed
+    ;; URL (which looks like a new URL), so let's make a new list and throw
+    ;; it into the local pin list.
+    (unless (alist-get 'hash pin)
+      ;; We use the hash locally to track things, so fake one up for now.
+      (setf (alist-get 'hash pin) (md5 url))
+      (setf (alist-get 'time pin) (format-time-string "%Y-%m-%dT%T%z"))
+      ;; Add the new faked pin to the start of the local pin list.
+      (setq pinboard-pins (vconcat (list pin) pinboard-pins)))))
+
 (defun pinboard-save (url title description tags private to-read)
   "Save a new pin to Pinboard.
 
@@ -363,6 +398,7 @@ TO-READ     - Should the pin be marked has having being read or not?"
     (cons 'shared (if private "no" "yes"))
     (cons 'toread (if to-read "yes" "no")))
    :pinboard-save)
+  (pinboard-refresh-locally url title description tags private to-read)
   (message "Saved %s to Pinboard" url))
 
 (defun pinboard-make-form (buffer-name title &optional pin)

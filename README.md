@@ -47,9 +47,9 @@ going. Here's what I planning on doing as time goes on:
 
 - [ ] View tag list/cloud.
 - [X] Add a pin.
-- [ ] Have add locally update the list.
+- [X] Have add locally update the list.
 - [X] Edit a pin.
-- [ ] Have edit locally update the list.
+- [X] Have edit locally update the list.
 - [ ] Delete a pin.
 - [ ] Have delete locally update the list.
 - [ ] Mark unread pin as read.
