@@ -243,39 +243,36 @@ FILTER."
 (defun pinboard-view ()
   "View the details of the currently-highlighted pin."
   (interactive)
-  (when (tabulated-list-get-id)
-    (let ((pin (pinboard-find-pin (tabulated-list-get-id))))
-      (unless pin
-        (error "Could not find pin %s" (tabulated-list-get-id)))
-      (with-help-window "*Pinboard pin*"
-        (with-current-buffer standard-output
-          (insert
-           (pinboard-caption "Title") "\n"
-           (alist-get 'description pin) "\n\n"
-           (pinboard-caption "URL") "\n")
-          (help-insert-xref-button
-           (alist-get 'href pin)
-           'help-url
-           (alist-get 'href pin))
-          (let ((desc (string-trim (alist-get 'extended pin))))
-            (unless (zerop (length desc))
-              (insert
-               "\n\n"
-               (pinboard-caption "Description") "\n"
-               (with-temp-buffer
-                 (insert desc)
-                 (fill-region (point-min) (point-max))
-                 (buffer-string)))))
-          (insert
-           "\n\n"
-           (pinboard-caption "Time") "\n"
-           (funcall pinboard-time-format-function (alist-get 'time pin)) "\n\n"
-           (pinboard-caption "Public") "\n"
-           (capitalize (alist-get 'shared pin)) "\n\n"
-           (pinboard-caption "Unread") "\n"
-           (capitalize (alist-get 'toread pin)) "\n\n"
-           (pinboard-caption "Tags") "\n"
-           (alist-get 'tags pin)))))))
+  (pinboard-with-current-pin pin
+    (with-help-window "*Pinboard pin*"
+      (with-current-buffer standard-output
+        (insert
+         (pinboard-caption "Title") "\n"
+         (alist-get 'description pin) "\n\n"
+         (pinboard-caption "URL") "\n")
+        (help-insert-xref-button
+         (alist-get 'href pin)
+         'help-url
+         (alist-get 'href pin))
+        (let ((desc (string-trim (alist-get 'extended pin))))
+          (unless (zerop (length desc))
+            (insert
+             "\n\n"
+             (pinboard-caption "Description") "\n"
+             (with-temp-buffer
+               (insert desc)
+               (fill-region (point-min) (point-max))
+               (buffer-string)))))
+        (insert
+         "\n\n"
+         (pinboard-caption "Time") "\n"
+         (funcall pinboard-time-format-function (alist-get 'time pin)) "\n\n"
+         (pinboard-caption "Public") "\n"
+         (capitalize (alist-get 'shared pin)) "\n\n"
+         (pinboard-caption "Unread") "\n"
+         (capitalize (alist-get 'toread pin)) "\n\n"
+         (pinboard-caption "Tags") "\n"
+         (alist-get 'tags pin))))))
 
 (defun pinboard-unread ()
   "Only show unread pins."
