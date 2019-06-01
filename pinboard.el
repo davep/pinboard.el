@@ -503,7 +503,7 @@ populated with the values of PIN."
   (if (pinboard-too-soon :pinboard-delete-pin)
       (error "Too soon. Please try again in a few seconds")
     (pinboard-with-current-pin pin
-      (when (y-or-n-p "Delete the current pin")
+      (when (y-or-n-p "Delete the current pin? ")
         (pinboard-delete-pin (alist-get 'href pin))))))
 
 (defvar pinboard-mode-map
