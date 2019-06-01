@@ -359,20 +359,23 @@ This function updates the local copy of the pins held in
 `pinboard-get-pins'). If the URL already exists in
 `pinboard-pins' the entry will be updated, otherwise a new pin
 will be added to `pinboard-pins'."
-  ;; Does the URL currently exist in our local list?
+  ;; Find any existing pin data based on the URL.
   (let ((pin (pinboard-find-pin 'href url)))
+    ;; Update all the normal values.
     (setf (alist-get 'href pin) url)
     (setf (alist-get 'description pin) title)
     (setf (alist-get 'extended pin) description)
     (setf (alist-get 'tags pin) tags)
     (setf (alist-get 'shared pin) (if private "no" "yes"))
     (setf (alist-get 'toread pin) (if to-read "yes" "no"))
-    ;; If we don't have it locally yet, it's either a new URL or a changed
-    ;; URL (which looks like a new URL), so let's make a new list and throw
-    ;; it into the local pin list.
+    ;; If there's no hash, we didn't really find a pin and we're building up
+    ;; data for a brand new one, so...
     (unless (alist-get 'hash pin)
-      ;; We use the hash locally to track things, so fake one up for now.
+      ;; Fake the hash; we need one so let's fake it and it'll do until we
+      ;; get the real one back from the server some time in the future.
       (setf (alist-get 'hash pin) (md5 url))
+      ;; Ditto with the time. Set it to now and we'll go with the server
+      ;; version later on.
       (setf (alist-get 'time pin) (format-time-string "%Y-%m-%dT%T%z"))
       ;; Add the new faked pin to the start of the local pin list.
       (setq pinboard-pins (vconcat (list pin) pinboard-pins)))))
