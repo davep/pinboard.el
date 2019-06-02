@@ -38,10 +38,6 @@ as I get time to work on it. Current commands available in the list include:
 | `pinboard-untagged`    | <kbd>T</kbd>   | Show only pins that have no tag             |
 | `pinboard-view`        | <kbd>SPC</kbd> | View the data for a pin in a window         |
 
-The code only works with all pins right now, and does its best to ensure
-that the list is never requested more than once every 5 minutes (as per the
-rate limits in the Pinboard API). Expect this to go wrong.
-
 ## TODO
 
 Things to do (and things done):
