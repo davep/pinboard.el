@@ -502,21 +502,30 @@ populated with the values of PIN."
         (setf (point) (point-min))
         (widget-forward 1)))))
 
+(defmacro pinboard-not-too-soon (action &rest body)
+  "Ensure the API isn't hit on too soon.
+
+A check is made to see if ACTION is happening too soon for the
+Pinboard API. If it is an error is emitted and BODY isn't
+evaluated, otherwise BODY is evaluated."
+  (declare (indent 1))
+  `(if (pinboard-too-soon ,action)
+       (error "Too soon. Please try again in a few seconds")
+     ,@body))
+
 ;;;###autoload
 (defun pinboard-add ()
   "Add a new pin to Pinboard."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-save)
-      (error "Too soon. Please try again in a few seconds")
+  (pinboard-not-too-soon :pinboard-save
     (pinboard-make-form "New pin" "Add a new pin to Pinboard")))
 
 (defun pinboard-edit ()
   "Edit the current pin in the pin list."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-save)
-      (error "Too soon. Please try again in a few seconds")
+  (pinboard-not-too-soon :pinboard-save
     (pinboard-with-current-pin pin
       (pinboard-make-form "Edit pin" "Edit the pin" pin))))
 
@@ -524,8 +533,7 @@ populated with the values of PIN."
   "Delete the current pin in the pin list."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-delete-pin)
-      (error "Too soon. Please try again in a few seconds")
+  (pinboard-not-too-soon :pinboard-delete-pin
     (pinboard-with-current-pin pin
       (when (y-or-n-p "Delete the current pin? ")
         (pinboard-delete-pin (alist-get 'href pin))))
@@ -535,8 +543,7 @@ populated with the values of PIN."
   "Toggle the read/unread status of the current pin in the list."
   (interactive)
   (pinboard-auth)
-  (if (pinboard-too-soon :pinboard-save)
-      (error "Too soon. Please try again in a few seconds")
+  (pinboard-not-too-soon :pinboard-save
     (pinboard-with-current-pin pin
       (let ((current (alist-get 'toread pin)))
         (setf (alist-get 'toread pin) (if (string= current "yes") "no" "yes"))
