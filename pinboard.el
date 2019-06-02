@@ -421,6 +421,19 @@ TO-READ     - Should the pin be marked has having being read or not?"
   (pinboard-refresh-locally url title description tags private to-read)
   (message "Saved %s to Pinboard" url))
 
+(defun pinboard-save-pin (pin)
+  "Save PIN to Pinboard.
+
+This is simply a wrapper around `pinboard-save' that pulls apart
+the pin data as is used in the main list."
+  (pinboard-save
+   (alist-get 'href pin)
+   (alist-get 'description pin)
+   (alist-get 'extended pin)
+   (alist-get 'tags pin)
+   (alist-get 'shared pin)
+   (alist-get 'toread pin)))
+
 (defun pinboard-make-form (buffer-name title &optional pin)
   "Make a pinboard edit form in the current buffer.
 
@@ -506,6 +519,17 @@ populated with the values of PIN."
       (when (y-or-n-p "Delete the current pin? ")
         (pinboard-delete-pin (alist-get 'href pin))))))
 
+(defun pinboard-toggle-read ()
+  "Toggle the read/unread status of the current pin in the list."
+  (interactive)
+  (pinboard-auth)
+  (if (pinboard-too-soon :pinboard-save)
+      (error "Too soon. Please try again in a few seconds")
+    (pinboard-with-current-pin pin
+      (let ((current (alist-get 'toread pin)))
+        (setf (alist-get 'toread pin) (if (string= current "yes") "no" "yes"))
+        (pinboard-save-pin pin)))))
+
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
@@ -524,6 +548,7 @@ populated with the values of PIN."
     (define-key map "n"         #'pinboard-add)
     (define-key map "e"         #'pinboard-edit)
     (define-key map "d"         #'pinboard-delete)
+    (define-key map "R"         #'pinboard-toggle-read)
     map)
   "Local keymap for `pinboard'.")
 
