@@ -64,6 +64,9 @@
   "Face used on captions in the Pinboard output windows."
   :group 'pinboard)
 
+(defconst pinboard-list-buffer-name "*Pinboard*"
+  "The name of the main Pinboard pin list buffer.")
+
 (defconst pinboard-api-url "https://api.pinboard.in/v1/%s?auth_token=%s&format=json"
   "Base URL of the Pinboard API.")
 
@@ -569,7 +572,7 @@ populated with the values of PIN."
   (pinboard-auth)
   (if (not pinboard-api-token)
       (error "Please set your Pinboard API token")
-    (pop-to-buffer "*Pinboard*")
+    (pop-to-buffer pinboard-list-buffer-name)
     (pinboard-mode)
     (pinboard-refresh)))
 
