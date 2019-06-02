@@ -53,7 +53,7 @@ Things to do (and things done):
 - [X] Have edit locally update the list.
 - [X] Delete a pin.
 - [X] Have delete locally update the list.
-- [ ] Mark unread pin as read.
+- [X] Mark unread pin as read.
 - [ ] Notes viewing.
 - [ ] Stuff.
 
