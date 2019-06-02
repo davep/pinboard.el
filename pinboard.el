@@ -235,6 +235,12 @@ FILTER."
                 (seq-filter (or filter #'identity) (pinboard-get-pins))))
   (tabulated-list-print t))
 
+(defun pinboard-maybe-redraw ()
+  "Redraw the pin list, but only if it exists."
+  (when-let ((buffer (get-buffer pinboard-list-buffer-name)))
+    (with-current-buffer buffer
+      (pinboard-redraw))))
+
 (defmacro pinboard-with-current-pin (name &rest body)
   "Evaluate BODY with the currently-selected pin as NAME."
   (declare (indent 1))
@@ -398,7 +404,9 @@ will be added to `pinboard-pins'."
       ;; version later on.
       (setf (alist-get 'time pin) (format-time-string "%Y-%m-%dT%T%z"))
       ;; Add the new faked pin to the start of the local pin list.
-      (setq pinboard-pins (vconcat (list pin) pinboard-pins)))))
+      (setq pinboard-pins (vconcat (list pin) pinboard-pins)))
+    ;; If the pinboard list buffer is kicking around somewhere...
+    (pinboard-maybe-redraw)))
 
 (defun pinboard-save (url title description tags private to-read)
   "Save a new pin to Pinboard.
@@ -520,7 +528,8 @@ populated with the values of PIN."
       (error "Too soon. Please try again in a few seconds")
     (pinboard-with-current-pin pin
       (when (y-or-n-p "Delete the current pin? ")
-        (pinboard-delete-pin (alist-get 'href pin))))))
+        (pinboard-delete-pin (alist-get 'href pin))))
+    (pinboard-maybe-redraw)))
 
 (defun pinboard-toggle-read ()
   "Toggle the read/unread status of the current pin in the list."
