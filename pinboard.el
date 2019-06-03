@@ -565,8 +565,8 @@ evaluated, otherwise BODY is evaluated."
   (pinboard-not-too-soon :pinboard-delete-pin
     (pinboard-with-current-pin pin
       (when (y-or-n-p "Delete the current pin? ")
-        (pinboard-delete-pin (alist-get 'href pin))))
-    (pinboard-maybe-redraw)))
+        (pinboard-delete-pin (alist-get 'href pin))
+        (pinboard-maybe-redraw)))))
 
 (defun pinboard-toggle-read ()
   "Toggle the read/unread status of the current pin in the list."
