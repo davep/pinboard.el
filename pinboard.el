@@ -503,6 +503,10 @@ populated with the values of PIN."
         (widget-create 'push-button
                        :notify
                        (lambda (&rest _)
+                         (when (string-empty-p (widget-value pinboard-field-url))
+                           (error "Please provide a URL for the pin"))
+                         (when (string-empty-p (widget-value pinboard-field-title))
+                           (error "Please provide a title for the pin"))
                          (pinboard-save
                           (widget-value pinboard-field-url)
                           (widget-value pinboard-field-title)
