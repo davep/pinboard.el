@@ -63,7 +63,7 @@
   :type 'function
   :group 'pinboard)
 
-(defface pinboard-caption
+(defface pinboard-caption-face
   '((t :inherit (bold font-lock-function-name-face)))
   "Face used on captions in the Pinboard output windows."
   :group 'pinboard)
@@ -293,7 +293,7 @@ FILTER."
 
 (defun pinboard-caption (s)
   "Add properties to S to make it a caption for Pinboard output."
-  (propertize (concat s ": ") 'font-lock-face 'pinboard-caption))
+  (propertize (concat s ": ") 'font-lock-face 'pinboard-caption-face))
 
 (defun pinboard-view ()
   "View the details of the currently-highlighted pin."
