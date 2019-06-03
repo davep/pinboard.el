@@ -463,8 +463,8 @@ the pin data as is used in the main list."
    (alist-get 'description pin)
    (alist-get 'extended pin)
    (alist-get 'tags pin)
-   (alist-get 'shared pin)
-   (alist-get 'toread pin)))
+   (string= (alist-get 'shared pin) "no")
+   (string= (alist-get 'toread pin) "yes")))
 
 (defun pinboard-make-form (buffer-name title &optional pin)
   "Make a pinboard edit form in the current buffer.
