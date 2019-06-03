@@ -41,7 +41,10 @@
 (defgroup pinboard nil
   "Pinboard client for Emacs."
   :group 'hypermedia
-  :link '(url-link :tag "GitHub" "https://github.com/davep/pinboard.el"))
+  :link '(url-link :tag "pinboard.el on GitHub"
+                   "https://github.com/davep/pinboard.el")
+  :link '(url-link :tag "Pinboard"
+                   "https://pinboard.in/"))
 
 (defcustom pinboard-private-symbol "-"
   "The character to use to show a pin is private."
