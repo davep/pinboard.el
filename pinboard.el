@@ -156,7 +156,11 @@ to help set rate limits."
     (pinboard-remember-call caller)
     (with-temp-buffer
       (url-insert-file-contents url)
-      (json-read-from-string (buffer-string)))))
+      (condition-case err
+          (json-read-from-string (buffer-string))
+        (error
+         (error "Error '%s' handling reply from Pinboard: %s"
+                (error-message-string err) (buffer-string)))))))
 
 (defun pinboard-last-updated ()
   "Get when Pinboard was last updated."
