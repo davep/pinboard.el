@@ -240,7 +240,7 @@ The pin is returned if VALUE matches."
 Optionally filter the list of pins to draw using the function
 FILTER."
   (cl-flet ((highlight (s pin)
-                       (propertize s 'face
+                       (propertize s 'font-lock-face
                                    (if (string= (alist-get 'toread pin) "yes")
                                        'pinboard-unread-face
                                      'pinboard-read-face))))
