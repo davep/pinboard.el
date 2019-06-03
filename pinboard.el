@@ -384,17 +384,6 @@ The title, description and tags are all searched. Search is case-insensitive."
   (interactive)
   (pinboard-redraw))
 
-(defmacro pinboard-field (suffix widget)
-  "Create a Pinboard field for a form.
-
-The field name will be pinboard-field- followed by SUFFIX, and
-its value will be set to WIDGET."
-  (declare (indent 1))
-  (let ((name (intern (format "pinboard-field-%s" suffix))))
-    `(progn
-       (make-local-variable (defvar ,name))
-       (setq ,name ,widget))))
-
 (defun pinboard-refresh-locally (url title description tags private to-read)
   "Refresh the local list of pins with the given information.
 
@@ -471,6 +460,17 @@ the pin data as is used in the main list."
    (alist-get 'tags pin)
    (string= (alist-get 'shared pin) "no")
    (string= (alist-get 'toread pin) "yes")))
+
+(defmacro pinboard-field (suffix widget)
+  "Create a Pinboard field for a form.
+
+The field name will be pinboard-field- followed by SUFFIX, and
+its value will be set to WIDGET."
+  (declare (indent 1))
+  (let ((name (intern (format "pinboard-field-%s" suffix))))
+    `(progn
+       (make-local-variable (defvar ,name))
+       (setq ,name ,widget))))
 
 (defun pinboard-make-form (buffer-name title &optional pin)
   "Make a pinboard edit form in the current buffer.
