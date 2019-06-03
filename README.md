@@ -4,9 +4,6 @@
 
 `pinboard.el` is an Emacs client for [Pinboard](https://pinboard.in/).
 
-Currently the early days of a work in progress. As such, if you play with it
-right now, don't be shocked if something is missing or plain broken.
-
 To get started, visit [your password settings
 page](https://pinboard.in/settings/password) on Pinboard and get the API
 token that's displayed there. Then edit `~/.authinfo` and add a line like
@@ -17,8 +14,7 @@ machine api.pinboard.in password foo:8ar8a5w188l3
 ```
 
 Once done, you can <kbd>M-x</kbd> <kbd>pinboard</kbd> <kbd>RET</kbd> and
-browse your pins. The client is currently very feature-poor, but expanding
-as I get time to work on it. Current commands available in the list include:
+browse your pins. Current commands available include:
 
 | Command                | Key            | Description                                 |
 |------------------------|----------------|---------------------------------------------|
