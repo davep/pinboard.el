@@ -484,24 +484,32 @@ populated with the values of PIN."
       (kill-buffer form-buffer-name))
     (let ((buffer (get-buffer-create form-buffer-name)))
       (with-current-buffer buffer
-        (widget-insert (format "%s\n\n" title))
+        (widget-insert (format "%s\n\n" (pinboard-caption title)))
         (pinboard-field url
-          (widget-create 'editable-field :size 80 :format "URL:\n%v"
+          (widget-create 'editable-field
+                         :size 80
+                         :format (format "%s\n%%v" (pinboard-caption "URL"))
                          (if pin (alist-get 'href pin) "")))
         (pinboard-field title
-          (widget-create 'editable-field :size 80 :format "\nTitle:\n%v"
+          (widget-create 'editable-field
+                         :size 80
+                         :format (format "\n%s\n%%v" (pinboard-caption "Title"))
                          (if pin (alist-get 'description pin) "")))
         (pinboard-field description
-          (widget-create 'text :size 80 :format "\nDescription:\n%v"
+          (widget-create 'text
+                         :size 80
+                         :format (format "\n%s\n%%v" (pinboard-caption "Description"))
                          (if pin (alist-get 'extended pin) "")))
         (pinboard-field tags
-          (widget-create 'editable-field :size 80 :format "\n\nTags:\n%v"
+          (widget-create 'editable-field
+                         :size 80
+                         :format (format "\n\n%s\n%%v" (pinboard-caption "Tags"))
                          (if pin (alist-get 'tags pin) "")))
-        (widget-insert "\n\nPrivate: ")
+        (widget-insert "\n\n" (pinboard-caption "Private") " ")
         (pinboard-field private
           (widget-create 'checkbox
                          (if pin (not (string= (alist-get 'shared pin) "yes")) t)))
-        (widget-insert " To Read: ")
+        (widget-insert " " (pinboard-caption "To Read") " ")
         (pinboard-field to-read
           (widget-create 'checkbox
                          (if pin (string= (alist-get 'toread pin) "yes") t)))
@@ -529,6 +537,7 @@ populated with the values of PIN."
         (widget-insert "\n")
         (use-local-map widget-keymap)
         (widget-setup)
+        (font-lock-mode)
         (switch-to-buffer buffer)
         (setf (point) (point-min))
         (widget-forward 1)))))
