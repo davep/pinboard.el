@@ -603,7 +603,11 @@ evaluated, otherwise BODY is evaluated."
   "Local keymap for `pinboard'.")
 
 (define-derived-mode pinboard-mode tabulated-list-mode "Pinboard Mode"
-  "Major mode for handling a list of Pinboard pins."
+  "Major mode for handling a list of Pinboard pins.
+
+The key bindings for `pinboard-mode' are:
+
+\\{pinboard-mode-map}"
   (setq tabulated-list-format
         [("P" 1 t)
          ("Description" 60 t)
@@ -614,7 +618,11 @@ evaluated, otherwise BODY is evaluated."
 
 ;;;###autoload
 (defun pinboard ()
-  "Browse your Pinboard pins."
+  "Browse your Pinboard pins.
+
+Key bindings that are active in the pin list include:
+
+\\{pinboard-mode-map}"
   (interactive)
   (pinboard-auth)
   (if (not pinboard-api-token)
