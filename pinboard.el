@@ -63,6 +63,11 @@
   :type 'function
   :group 'pinboard)
 
+(defcustom pinboard-confirm-toggle-read t
+  "Should we confirm toggling the read state of a pin?"
+  :type 'boolean
+  :group 'pinboard)
+
 (defface pinboard-caption-face
   '((t :inherit (bold font-lock-function-name-face)))
   "Face used on captions in the Pinboard output windows."
@@ -588,9 +593,13 @@ evaluated, otherwise BODY is evaluated."
   (pinboard-auth)
   (pinboard-not-too-soon :pinboard-save
     (pinboard-with-current-pin pin
-      (let ((current (alist-get 'toread pin)))
-        (setf (alist-get 'toread pin) (if (string= current "yes") "no" "yes"))
-        (pinboard-save-pin pin)))))
+      (let ((current (string= (alist-get 'toread pin) "yes")))
+        (when (or (not pinboard-confirm-toggle-read)
+                  (y-or-n-p (format "Mark \"%s\" as %sread? "
+                                    (alist-get 'href pin)
+                                    (if current "" "un"))))
+          (setf (alist-get 'toread pin) (if current "no" "yes"))
+          (pinboard-save-pin pin))))))
 
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
