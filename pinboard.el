@@ -505,11 +505,11 @@ populated with the values of PIN."
                          :size 80
                          :format (format "\n\n%s\n%%v" (pinboard-caption "Tags"))
                          (if pin (alist-get 'tags pin) "")))
-        (widget-insert "\n\n" (pinboard-caption "Private") " ")
+        (widget-insert "\n\n" (pinboard-caption "Private"))
         (pinboard-field private
           (widget-create 'checkbox
                          (if pin (not (string= (alist-get 'shared pin) "yes")) t)))
-        (widget-insert " " (pinboard-caption "To Read") " ")
+        (widget-insert " " (pinboard-caption "To Read"))
         (pinboard-field to-read
           (widget-create 'checkbox
                          (if pin (string= (alist-get 'toread pin) "yes") t)))
