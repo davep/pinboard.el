@@ -105,6 +105,9 @@ REPOSITORY!")
 (defvar pinboard-tags nil
   "Cache of tags the user has used.")
 
+(defvar pinboard-last-filter nil
+  "The last filter used by `pinboard-redraw'.")
+
 (defun pinboard-remember-call (caller)
   "Remember now as when CALLER was last called."
   (put caller :pinboard-last-called (float-time)))
@@ -255,14 +258,16 @@ FILTER."
                       (highlight (alist-get 'description pin) pin)
                       (highlight (funcall pinboard-time-format-function (alist-get 'time pin)) pin)
                       (highlight (alist-get 'href pin) pin))))
-                  (seq-filter (or filter #'identity) (pinboard-get-pins)))))
+                  (seq-filter
+                   (setq pinboard-last-filter (or filter #'identity))
+                   (pinboard-get-pins)))))
   (tabulated-list-print t))
 
 (defun pinboard-maybe-redraw ()
   "Redraw the pin list, but only if it exists."
   (when-let ((buffer (get-buffer pinboard-list-buffer-name)))
     (with-current-buffer buffer
-      (pinboard-redraw))))
+      (pinboard-redraw pinboard-last-filter))))
 
 (defmacro pinboard-with-current-pin (name &rest body)
   "Evaluate BODY with the currently-selected pin as NAME."
