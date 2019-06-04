@@ -583,7 +583,7 @@ evaluated, otherwise BODY is evaluated."
   (pinboard-auth)
   (pinboard-not-too-soon :pinboard-delete-pin
     (pinboard-with-current-pin pin
-      (when (y-or-n-p "Delete the current pin? ")
+      (when (yes-or-no-p (format "Delete \"%s\"? " (alist-get 'href pin)))
         (pinboard-delete-pin (alist-get 'href pin))
         (pinboard-maybe-redraw)))))
 
