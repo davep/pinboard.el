@@ -181,10 +181,9 @@ to help set rate limits."
     ;; don't have any tags yet...
     (if (or (not pinboard-tags) (< (pinboard-last-called :pinboard-get-tags) (pinboard-last-updated)))
         ;; ...grab a copy of the user's tags.
-        (setq pinboard-tags
-              (pinboard-call
-               (pinboard-api-url "tags" "get")
-               :pinboard-get-tags))
+        (setq pinboard-tags (pinboard-call
+                             (pinboard-api-url "tags" "get")
+                             :pinboard-get-tags))
       ;; Looks like nothing has changed, so go with the tags we've already
       ;; got.
       pinboard-tags)))
@@ -219,9 +218,9 @@ to help set rate limits."
   ;; Filter out any versions held locally.
   (when pinboard-pins
     (setq pinboard-pins
-          (seq-remove (lambda (pin)
-                        (string= (alist-get 'href pin) href))
-                      pinboard-pins)))
+          (seq-remove
+           (lambda (pin) (string= (alist-get 'href pin) href))
+           pinboard-pins)))
   ;; Let the user know we did it.
   (message "Deleted \"%s\"." href))
 
@@ -230,8 +229,7 @@ to help set rate limits."
 
 The pin is returned if VALUE matches."
   (seq-find
-   (lambda (pin)
-     (string= (alist-get via pin) value))
+   (lambda (pin) (string= (alist-get via pin) value))
    (pinboard-get-pins)))
 
 (defun pinboard-redraw (&optional filter)
