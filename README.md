@@ -39,13 +39,6 @@ browse your pins. Current commands available include:
 Things to do (and things done):
 
 - [ ] View tag list/cloud.
-- [X] Add a pin.
-- [X] Have add locally update the list.
-- [X] Edit a pin.
-- [X] Have edit locally update the list.
-- [X] Delete a pin.
-- [X] Have delete locally update the list.
-- [X] Mark unread pin as read.
 - [ ] Notes viewing.
 - [ ] Stuff.
 
