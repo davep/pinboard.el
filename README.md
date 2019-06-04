@@ -36,10 +36,7 @@ browse your pins. Current commands available include:
 
 ## TODO
 
-Things to do (and things done):
-
-- [ ] View tag list/cloud.
-- [ ] Notes viewing.
-- [ ] Stuff.
+Please see [the GitHub issues
+list](https://github.com/davep/pinboard.el/issues) for things I plan to do.
 
 [//]: # (README.md ends here)
