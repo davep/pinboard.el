@@ -34,6 +34,7 @@
 (require 'url-vars)
 (require 'url-util)
 (require 'wid-edit)
+(require 'easymenu)
 (require 'browse-url)
 (require 'parse-time)
 (require 'auth-source)
@@ -632,6 +633,29 @@ The key bindings for `pinboard-mode' are:
          ("URL" 30 t)])
   (tabulated-list-init-header)
   (setq tabulated-list-sort-key '("Time" . t)))
+
+(easy-menu-define pinboard-mode-menu pinboard-mode-map "Pinboard menu"
+  '("Pinboard"
+    ["Refresh/Show all"          pinboard-refresh]
+    ["View pin"                  pinboard-view        (tabulated-list-get-id)]
+    ["Add URL to kill buffer"    pinboard-kill-url    (tabulated-list-get-id)]
+    ["Search pins..."            pinboard-search]
+    "--"
+    ["Add a pin..."              pinboard-add]
+    ["Edit the current pin..."   pinboard-edit        (tabulated-list-get-id)]
+    ["Toggle read status..."     pinboard-toggle-read (tabulated-list-get-id)]
+    ["Delete the current pin..." pinboard-delete      (tabulated-list-get-id)]
+    "--"
+    ["Show public pins"          pinboard-public]
+    ["Show private pins"         pinboard-private]
+    "--"
+    ["Show read pins"            pinboard-read]
+    ["Show unread pins"          pinboard-unread]
+    "--"
+    ["Show pins tagged..."       pinboard-tagged]
+    ["Show untagged pins"        pinboard-untagged]
+    "--"
+    ["Quit"                      quit-window]))
 
 ;;;###autoload
 (defun pinboard ()
