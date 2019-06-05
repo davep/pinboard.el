@@ -127,18 +127,15 @@ REPOSITORY!")
 See if we're calling CALLER before RATE has expired. RATE is
 optional and defaults to 3 seconds (as per the pinboard API
 documentation.)"
-  (let ((last (pinboard-last-called caller)))
-    (when last
-      (<= (- (float-time) last) (or rate 3)))))
+  (when-let ((last (pinboard-last-called caller)))
+    (<= (- (float-time) last) (or rate 3))))
 
 (defun pinboard-auth ()
   "Attempt to get the API token for Pinboard."
   (unless pinboard-api-token
-    (let ((auth (car (auth-source-search :host "api.pinboard.in" :requires '(secret)))))
-      (when auth
-        (let ((token (plist-get auth :secret)))
-          (when token
-            (setq pinboard-api-token (funcall token))))))))
+    (when-let ((auth (car (auth-source-search :host "api.pinboard.in" :requires '(secret))))
+               (token (plist-get auth :secret)))
+      (setq pinboard-api-token (funcall token)))))
 
 (defun pinboard-api-url (&rest params)
   "Build the API call from PARAMS."
@@ -174,9 +171,8 @@ to help set rate limits."
   "Get when Pinboard was last updated."
   (if (pinboard-too-soon :pinboard-last-updated)
       pinboard-last-updated
-    (let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
-      (when result
-        (setq pinboard-last-updated (float-time (parse-iso8601-time-string result)))))))
+    (when-let ((result (alist-get 'update_time (pinboard-call (pinboard-api-url "posts" "update") :pinboard-last-updated))))
+      (setq pinboard-last-updated (float-time (parse-iso8601-time-string result))))))
 
 (defun pinboard-get-tags ()
   "Get the list of tags used by the user."
