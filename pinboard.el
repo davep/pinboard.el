@@ -360,7 +360,8 @@ FILTER."
   (let ((tag (downcase tag)))
     (pinboard-redraw
      (lambda (pin)
-       (seq-contains (split-string (downcase (alist-get 'tags pin))) tag)))))
+       (seq-contains (split-string (downcase (alist-get 'tags pin))) tag)))
+    (message "Showing all pins tagged: %s" tag)))
 
 (defun pinboard-untagged ()
   "Only show pints that have no tags."
