@@ -510,7 +510,9 @@ A new buffer is created, with a name based around BUFFER-NAME.
 
 TITLE is shown at the top of the form and the form is optionally
 populated with the values of PIN."
-  (let ((form-buffer-name (format "*Pinboard: %s*" buffer-name)))
+  (let ((default-url (unless (derived-mode-p 'pinboard-mode)
+                       (thing-at-point-url-at-point)))
+        (form-buffer-name (format "*Pinboard: %s*" buffer-name)))
     (when (get-buffer form-buffer-name)
       (kill-buffer form-buffer-name))
     (let ((buffer (get-buffer-create form-buffer-name)))
@@ -520,7 +522,9 @@ populated with the values of PIN."
           (widget-create 'editable-field
                          :size 80
                          :format (format "%s\n%%v" (pinboard-caption "URL"))
-                         (if pin (alist-get 'href pin) "")))
+                         (if pin
+                             (alist-get 'href pin)
+                           (or default-url ""))))
         (pinboard-field title
           (widget-create 'editable-field
                          :size 80
