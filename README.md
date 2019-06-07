@@ -35,6 +35,15 @@ browse your pins. Current commands available include:
 | `pinboard-untagged`      | <kbd>T</kbd>   | Show only pins that have no tag             |
 | `pinboard-view`          | <kbd>SPC</kbd> | View the data for a pin in a window         |
 
+Commands available that aren't part of the pin list, and that you might want
+to bind to keys, include:
+
+| Command                  | Description                           |
+| ------------------------ | ------------------------------------- |
+| `pinboard`               | Open the Pinboard pin list            |
+| `pinboard-add`           | Add a new pin to Pinboard             |
+| `pinboard-add-for-later` | Prompt for a URL and add it for later |
+
 ## TODO
 
 Please see [the GitHub issues

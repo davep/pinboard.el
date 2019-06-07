@@ -623,6 +623,20 @@ evaluated, otherwise BODY is evaluated."
           (setf (alist-get 'toread pin) (if current "no" "yes"))
           (pinboard-save-pin pin))))))
 
+;;;###autoload
+(defun pinboard-add-for-later (url)
+  "Quickly add URL for later review and reading.
+
+This command simply prompts for a URL and adds it to Pinboard as
+private and unread, so you can come back to it and look at it
+later."
+  (interactive "sURL: ")
+  (if (string-empty-p (string-trim url))
+      (error "Please provide a URL to save")
+    (pinboard-auth)
+    (pinboard-not-too-soon :pinboard-save
+      (pinboard-save url url "" "" t t))))
+
 (defvar pinboard-mode-map
   (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
