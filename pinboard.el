@@ -364,9 +364,13 @@ FILTER."
   (interactive)
   (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "no"))))
 
-(defun pinboard-tagged (tag)
+(defun pinboard-read-tag ()
+  "Read and return a Pinboard tag from the user."
+  (completing-read "Tag: " (pinboard-get-tags)))
+
+(defun pinboard-extend-tagged (tag)
   "Add TAG to the current tag filter and redraw."
-  (interactive (list (completing-read "Tag: " (pinboard-get-tags))))
+  (interactive (list (pinboard-read-tag)))
   (cl-pushnew (downcase tag) pinboard-tag-filter :test #'equal)
   (pinboard-redraw
    (lambda (pin)
@@ -376,6 +380,12 @@ FILTER."
                pinboard-tag-filter))
       (length pinboard-tag-filter))))
   (message "Showing all pins tagged: %s" (string-join pinboard-tag-filter ", ")))
+
+(defun pinboard-tagged (tag)
+  "Show all pins tagged with TAG."
+  (interactive (list (pinboard-read-tag)))
+  (setq pinboard-tag-filter nil)
+  (pinboard-extend-tagged tag))
 
 (defun pinboard-untagged ()
   "Only show pints that have no tags."
@@ -623,8 +633,9 @@ evaluated, otherwise BODY is evaluated."
     (define-key map "P"         #'pinboard-private)
     (define-key map "u"         #'pinboard-unread)
     (define-key map "r"         #'pinboard-read)
-    (define-key map "t"         #'pinboard-tagged)
-    (define-key map "T"         #'pinboard-untagged)
+    (define-key map "t"         #'pinboard-extend-tagged)
+    (define-key map "T"         #'pinboard-tagged)
+    (define-key map "U"         #'pinboard-untagged)
     (define-key map "/"         #'pinboard-search)
     (define-key map " "         #'pinboard-view)
     (define-key map (kbd "RET") #'pinboard-open)
