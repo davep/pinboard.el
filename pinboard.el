@@ -114,6 +114,12 @@ REPOSITORY!")
 (defvar pinboard-last-filter nil
   "The last filter used by `pinboard-redraw'.")
 
+(defvar pinboard-tag-filter nil
+  "The current list of tags we're filtering by.
+
+Used by `pinboard-tagged' to create an additive filtering
+effect.")
+
 (defun pinboard-remember-call (caller)
   "Remember now as when CALLER was last called."
   (put caller :pinboard-last-called (float-time)))
@@ -242,6 +248,10 @@ The pin is returned if VALUE matches."
 
 Optionally filter the list of pins to draw using the function
 FILTER."
+  ;; If there is no filter...
+  (unless filter
+    ;; ...ensure any ongoing tagging filter gets cleared.
+    (setq pinboard-tag-filter nil))
   (cl-flet ((highlight (s pin)
                        (propertize s 'font-lock-face
                                    (if (string= (alist-get 'toread pin) "yes")
@@ -355,13 +365,17 @@ FILTER."
   (pinboard-redraw (lambda (pin) (string= (alist-get 'shared pin) "no"))))
 
 (defun pinboard-tagged (tag)
-  "Only show pins that are tagged with TAG."
+  "Add TAG to the current tag filter and redraw."
   (interactive (list (completing-read "Tag: " (pinboard-get-tags))))
-  (let ((tag (downcase tag)))
-    (pinboard-redraw
-     (lambda (pin)
-       (seq-contains (split-string (downcase (alist-get 'tags pin))) tag)))
-    (message "Showing all pins tagged: %s" tag)))
+  (cl-pushnew (downcase tag) pinboard-tag-filter :test #'equal)
+  (pinboard-redraw
+   (lambda (pin)
+     (=
+      (length (seq-intersection
+               (split-string (downcase (alist-get 'tags pin)))
+               pinboard-tag-filter))
+      (length pinboard-tag-filter))))
+  (message "Showing all pins tagged: %s" (string-join pinboard-tag-filter ", ")))
 
 (defun pinboard-untagged ()
   "Only show pints that have no tags."
