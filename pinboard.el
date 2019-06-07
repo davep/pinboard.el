@@ -35,6 +35,7 @@
 (require 'url-util)
 (require 'wid-edit)
 (require 'easymenu)
+(require 'thingatpt)
 (require 'browse-url)
 (require 'parse-time)
 (require 'auth-source)
@@ -630,7 +631,7 @@ evaluated, otherwise BODY is evaluated."
 This command simply prompts for a URL and adds it to Pinboard as
 private and unread, so you can come back to it and look at it
 later."
-  (interactive "sURL: ")
+  (interactive (list (read-string "URL: " (thing-at-point-url-at-point))))
   (if (string-empty-p (string-trim url))
       (error "Please provide a URL to save")
     (pinboard-auth)
