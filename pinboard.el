@@ -110,7 +110,7 @@
 (defconst pinboard-api-url "https://api.pinboard.in/v1/%s?auth_token=%s&format=json"
   "Base URL of the Pinboard API.")
 
-(defconst pinboard-agent "pinboard.el (https://github/davep/pinboard.el)"
+(defconst pinboard-agent "pinboard.el (https://github.com/davep/pinboard.el)"
   "User agent to send to the Pinboard server.")
 
 (defvar pinboard-api-token nil
