@@ -1,5 +1,8 @@
 # pinboard.el
 
+[![MELPA Stable](https://stable.melpa.org/packages/pinboard-badge.svg)](https://stable.melpa.org/#/pinboard)
+[![MELPA](https://melpa.org/packages/pinboard-badge.svg)](https://melpa.org/#/pinboard)
+
 ## Commentary:
 
 `pinboard.el` is an Emacs client for [Pinboard](https://pinboard.in/).
