@@ -648,6 +648,12 @@ evaluated, otherwise BODY is evaluated."
           (pinboard-save-pin pin))))))
 
 ;;;###autoload
+(defun pinboard-visit-pinboard()
+  "Visit pinboard.in itself."
+  (interactive)
+  (browse-url "https://pinboard.in/"))
+
+;;;###autoload
 (defun pinboard-add-for-later (url)
   "Quickly add URL for later review and reading.
 
@@ -681,6 +687,7 @@ later."
     (define-key map "e"         #'pinboard-edit)
     (define-key map "d"         #'pinboard-delete)
     (define-key map "R"         #'pinboard-toggle-read)
+    (define-key map "v"         #'pinboard-visit-pinboard)
     map)
   "Local keymap for `pinboard'.")
 
@@ -719,6 +726,8 @@ The key bindings for `pinboard-mode' are:
     ["Show pins tagged..."            pinboard-tagged]
     ["Add tag to current tag view..." pinboard-extend-tagged pinboard-tag-filter]
     ["Show untagged pins"             pinboard-untagged]
+    "--"
+    ["Visit pinboard in browser"      pinboard-visit-pinboard]
     "--"
     ["Quit"                           quit-window]))
 
