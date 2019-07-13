@@ -131,9 +131,6 @@ REPOSITORY!")
 (defvar pinboard-tags nil
   "Cache of tags the user has used.")
 
-(defvar pinboard-notes nil
-  "Cache of notes created by the user.")
-
 (defvar pinboard-last-filter nil
   "The last filter used by `pinboard-redraw'.")
 
@@ -221,20 +218,6 @@ to help set rate limits."
       ;; Looks like nothing has changed, so go with the tags we've already
       ;; got.
       pinboard-tags)))
-
-(defun pinboard-get-notes ()
-  "Get the list of notes created by the user."
-  (if (pinboard-too-soon :pinboard-get-notes)
-      pinboard-notes
-    (when-let ((notes (alist-get 'notes (pinboard-call (pinboard-api-url "notes" "list") :pinboard-get-notes))))
-      (setq pinboard-notes notes))))
-
-(defun pinboard-get-note (id)
-  "Get note with the given ID."
-  (if (pinboard-too-soon :pinboard-get-note)
-      (error "Please try again in a moment")
-    (when-let ((note (pinboard-call (pinboard-api-url "notes" id) :pinboard-get-note)))
-      note)))
 
 (defun pinboard-get-pins ()
   "Return all of the user's pins on Pinboard."
