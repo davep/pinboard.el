@@ -364,10 +364,15 @@ FILTER."
          (pinboard-caption "Tags") "\n"
          (alist-get 'tags pin))))))
 
-(defun pinboard-unread ()
-  "Only show unread pins."
-  (interactive)
-  (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "yes"))))
+(defun pinboard-unread (on-web)
+  "Only show unread pins.
+
+If ON-WEB is non-nil a view of unread pins will be opened in the
+web browser instead."
+  (interactive "P")
+  (if on-web
+      (browse-url "https://pinboard.in/toread")
+    (pinboard-redraw (lambda (pin) (string= (alist-get 'toread pin) "yes")))))
 
 (defun pinboard-read ()
   "Only show read pins."
