@@ -48,6 +48,14 @@ to bind to keys, include:
 | `pinboard-add`           | Add a new pin to Pinboard             |
 | `pinboard-add-for-later` | Prompt for a URL and add it for later |
 
+## Org support
+
+[Konrad Hinsen](https://gist.github.com/khinsen) has [written a handy little
+add-on](https://github.com/davep/pinboard.el/issues/8) that connects
+`pinboard` with `org-mode`, by providing an easy method of pulling a link
+out of `pinboard` and getting it into `org-mode`. See [the gist he wrote for
+the code](https://gist.github.com/khinsen/7ed357eed9b27f142e4fa6f5c4ad45dd).
+
 ## TODO
 
 Please see [the GitHub issues
