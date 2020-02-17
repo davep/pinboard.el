@@ -56,6 +56,10 @@ add-on](https://github.com/davep/pinboard.el/issues/8) that connects
 out of `pinboard` and getting it into `org-mode`. See [the gist he wrote for
 the code](https://gist.github.com/khinsen/7ed357eed9b27f142e4fa6f5c4ad45dd).
 
+## Troubleshooting
+### `pinboard.el` doesn't find API token despite it being set in `.authinfo`
+Check the variable `auth-sources` to ensure that Emacs is looking for `.authconfig`. Some Emacs-frameworks set their own default (typically enforcing gpg encryption).
+
 ## TODO
 
 Please see [the GitHub issues
