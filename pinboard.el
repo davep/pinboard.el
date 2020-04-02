@@ -5,7 +5,7 @@
 ;; Version: 1.2
 ;; Keywords: hypermedia, bookmarking, reading, pinboard
 ;; URL: https://github.com/davep/pinboard.el
-;; Package-Requires: ((emacs "25") (cl-lib "0.5"))
+;; Package-Requires: ((emacs "25.1") (cl-lib "0.5"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
