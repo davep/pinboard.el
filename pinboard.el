@@ -189,7 +189,9 @@ to help set rate limits."
     (with-temp-buffer
       (url-insert-file-contents url)
       (condition-case err
-          (json-read-from-string (buffer-string))
+          ;; https://github.com/davep/pinboard.el/issues/7
+          (let ((json-false ""))
+            (json-read-from-string (buffer-string)))
         (error
          (error "Error '%s' handling reply from Pinboard: %s"
                 (error-message-string err) (buffer-string)))))))
