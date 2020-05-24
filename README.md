@@ -61,8 +61,15 @@ the code](https://gist.github.com/khinsen/7ed357eed9b27f142e4fa6f5c4ad45dd).
 ### `pinboard.el` doesn't find API token despite it being set in `.authinfo`
 
 Check the variable `auth-sources` to ensure that Emacs is looking for
-`.authconfig`. Some Emacs-frameworks set their own default (typically
+`.authinfo`. Some Emacs-frameworks set their own default (typically
 enforcing gpg encryption).
+
+If you're using `use-package`, you can append the `~/.authinfo` file to 
+the `auth-sources` list like this:
+
+```
+(use-package pinboard :config (add-to-list 'auth-sources "~/.authinfo" t))
+```
 
 ## TODO
 
