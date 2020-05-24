@@ -67,7 +67,7 @@ enforcing gpg encryption).
 If you're using `use-package`, you can append the `~/.authinfo` file to 
 the `auth-sources` list like this:
 
-```
+```elisp
 (use-package pinboard :config (add-to-list 'auth-sources "~/.authinfo" t))
 ```
 
