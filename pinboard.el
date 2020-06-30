@@ -2,7 +2,7 @@
 ;; Copyright 2019-2020 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.3
+;; Version: 1.3.1
 ;; Keywords: hypermedia, bookmarking, reading, pinboard
 ;; URL: https://github.com/davep/pinboard.el
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.5"))
@@ -178,6 +178,12 @@ documentation.)"
                    params)
            "&")))
 
+(defun pinboard--api-bom-guard (s)
+  "Guard S against the current BOM issue with the Pinboard API."
+  ;; Yes, yes, I know... It's just for now. See
+  ;; https://github.com/davep/pinboard.el/issues/12 for some background.
+  (substring s (if (= (aref s 0) 65279) 1 0)))
+
 (defun pinboard-call (url caller)
   "Call on URL and return the data.
 
@@ -191,7 +197,7 @@ to help set rate limits."
       (condition-case err
           ;; https://github.com/davep/pinboard.el/issues/7
           (let ((json-false ""))
-            (json-read-from-string (buffer-string)))
+            (json-read-from-string (pinboard--api-bom-guard (buffer-string))))
         (error
          (error "Error '%s' handling reply from Pinboard: %s"
                 (error-message-string err) (buffer-string)))))))
