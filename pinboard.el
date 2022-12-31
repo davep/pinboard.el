@@ -160,7 +160,7 @@ documentation.)"
 (defun pinboard-auth ()
   "Attempt to get the API token for Pinboard."
   (unless pinboard-api-token
-    (when-let ((auth (car (auth-source-search :host "api.pinboard.in" :requires '(secret))))
+    (when-let ((auth (car (auth-source-search :host "api.pinboard.in" :require '(:secret))))
                (token (plist-get auth :secret)))
       (setq pinboard-api-token (funcall token)))))
 
