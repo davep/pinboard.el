@@ -77,6 +77,11 @@
   :type 'string
   :group 'pinboard)
 
+(defcustom pinboard-confirm-toggle-private t
+  "Should we confirm toggling the private state of a pin?"
+  :type 'boolean
+  :group 'pinboard)
+
 (defcustom pinboard-time-format-function
   '(lambda (time)
      (format-time-string "%Y-%m-%d %H:%M:%S" (parse-iso8601-time-string time)))
@@ -660,6 +665,20 @@ evaluated, otherwise BODY is evaluated."
           (setf (alist-get 'toread pin) (if current "no" "yes"))
           (pinboard-save-pin pin))))))
 
+(defun pinboard-toggle-private ()
+  "Toggle the private/public status of the current pin in the list."
+  (interactive)
+  (pinboard-auth)
+  (pinboard-not-too-soon :pinboard-save
+    (pinboard-with-current-pin pin
+      (let ((current (string= (alist-get 'shared pin) "yes")))
+        (when (or (not pinboard-confirm-toggle-private)
+                  (y-or-n-p (format "Mark \"%s\" as %s? "
+                                    (alist-get 'href pin)
+                                    (if current "private" "public"))))
+          (setf (alist-get 'shared pin) (if current "no" "yes"))
+          (pinboard-save-pin pin))))))
+
 ;;;###autoload
 (defun pinboard-visit-pinboard()
   "Visit pinboard.in itself."
@@ -700,6 +719,7 @@ later."
     (define-key map "e"         #'pinboard-edit)
     (define-key map "d"         #'pinboard-delete)
     (define-key map "R"         #'pinboard-toggle-read)
+    (define-key map "i"         #'pinboard-toggle-private)
     (define-key map "v"         #'pinboard-visit-pinboard)
     map)
   "Local keymap for `pinboard'.")
