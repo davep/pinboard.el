@@ -1,8 +1,8 @@
 ;;; pinboard.el --- A pinboard.in client -*- lexical-binding: t -*-
-;; Copyright 2019-2020 by Dave Pearson <davep@davep.org>
+;; Copyright 2019-2023 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.3.1
+;; Version: 1.4.0
 ;; Keywords: hypermedia, bookmarking, reading, pinboard
 ;; URL: https://github.com/davep/pinboard.el
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.5"))
