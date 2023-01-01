@@ -28,6 +28,7 @@ browse your pins. Current commands available include:
 | `pinboard-open`           | <kbd>RET</kbd> | Open the pin's URL in a web browser         |
 | `pinboard-private`        | <kbd>P</kbd>   | Show only private pins in the list          |
 | `pinboard-public`         | <kbd>p</kbd>   | Show only public pins in the list           |
+| `pinboard-toggle-private` | <kbd>i</kbd>   | Toggle the public/private status of the pin |
 | `pinboard-read`           | <kbd>r</kbd>   | Show only read pins in the list             |
 | `pinboard-refresh`        | <kbd>g</kbd>   | Refresh the list, showing all pins          |
 | `pinboard-search`         | <kbd>/</kbd>   | Show only pins that contain the search text |
@@ -64,7 +65,7 @@ Check the variable `auth-sources` to ensure that Emacs is looking for
 `.authinfo`. Some Emacs-frameworks set their own default (typically
 enforcing gpg encryption).
 
-If you're using `use-package`, you can append the `~/.authinfo` file to 
+If you're using `use-package`, you can append the `~/.authinfo` file to
 the `auth-sources` list like this:
 
 ```elisp
