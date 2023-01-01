@@ -183,12 +183,6 @@ documentation.)"
                    params)
            "&")))
 
-(defun pinboard--api-bom-guard (s)
-  "Guard S against the current BOM issue with the Pinboard API."
-  ;; Yes, yes, I know... It's just for now. See
-  ;; https://github.com/davep/pinboard.el/issues/12 for some background.
-  (substring s (if (= (aref s 0) 65279) 1 0)))
-
 (defun pinboard-call (url caller)
   "Call on URL and return the data.
 
@@ -202,7 +196,7 @@ to help set rate limits."
       (condition-case err
           ;; https://github.com/davep/pinboard.el/issues/7
           (let ((json-false ""))
-            (json-read-from-string (pinboard--api-bom-guard (buffer-string))))
+            (json-read-from-string (buffer-string)))
         (error
          (error "Error '%s' handling reply from Pinboard: %s"
                 (error-message-string err) (buffer-string)))))))
