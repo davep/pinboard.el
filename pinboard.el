@@ -77,11 +77,6 @@
   :type 'string
   :group 'pinboard)
 
-(defcustom pinboard-confirm-toggle-private t
-  "Should we confirm toggling the private state of a pin?"
-  :type 'boolean
-  :group 'pinboard)
-
 (defcustom pinboard-time-format-function
   '(lambda (time)
      (format-time-string "%Y-%m-%d %H:%M:%S" (parse-iso8601-time-string time)))
@@ -91,6 +86,11 @@
 
 (defcustom pinboard-confirm-toggle-read t
   "Should we confirm toggling the read state of a pin?"
+  :type 'boolean
+  :group 'pinboard)
+
+(defcustom pinboard-confirm-toggle-private t
+  "Should we confirm toggling the private state of a pin?"
   :type 'boolean
   :group 'pinboard)
 
